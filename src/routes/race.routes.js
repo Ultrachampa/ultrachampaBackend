@@ -6,11 +6,11 @@ import {
   editRaceDiscount,
   getRaces,
   updateRaceAvailability,
-  updateRacePriceById,
+  // updateRacePriceById,
 } from "../controllers/race.controllers";
 
 import { verifyToken, isAdmin } from "../middlewares/verifyToken";
-import { payProduct } from "../controllers/mp.controllers";
+// import { payProduct } from "../controllers/mp.controllers";
 const router = Router();
 
 router.post("/createRace", [verifyToken, isAdmin], createRace);
@@ -27,7 +27,7 @@ router.patch(
 
 router.patch("/modifyRaceAvailability/:id", [verifyToken, isAdmin], updateRaceAvailability);
 
-router.post("/pay/:id", verifyToken, payProduct);
+// router.post("/pay/:id", verifyToken, payProduct);
 
 router.put("/modifyRace/:id", [verifyToken, isAdmin], editRaceData);
 

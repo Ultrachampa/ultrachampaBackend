@@ -4,7 +4,10 @@ import authRoutes from "./routes/auth.routes";
 import userRoutes from "./routes/user.routes";
 import raceRoutes from "./routes/race.routes";
 import discountRoutes from "./routes/discounts.routes"
+import saleRoutes from "./routes/sale.routes"
+import feeRoutes from "./routes/fee.routes"
 import bodyParser from "body-parser";
+import mpRoutes from "./routes/mp.routes"
 import { createRoles } from "./libs/initialSetup";
 import cors from "cors";
 
@@ -24,5 +27,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/races", raceRoutes);
 app.use("/api/discounts", discountRoutes);
+app.use("/api/sales", saleRoutes);
+app.use("/api/fees", feeRoutes);
+app.use("/api/payment", mpRoutes);
 
 export default app;
