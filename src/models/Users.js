@@ -66,6 +66,15 @@ const userSchema = new Schema(
     resetToken: { type: String, default: null },
     resetTokenExp: { type: Date, default: null },
     birthdate: { type: Date, required: false },
+    
+    primeraCarrera: { type: String, required: false },
+    primerViajeAlLugar: { type: String, required: false },
+    diasAlojamiento: { type: String, required: false },
+    comoLlegas: { type: String, required: false },
+    personasNoParticipantes: { type: String, required: false },
+    comoTeEnteraste: { type: String, required: false },
+    carrerasAlAnio: { type: String, required: false },
+    basesYCondiciones: { type: String, required: false },
   },
   {
     versionKey: false,

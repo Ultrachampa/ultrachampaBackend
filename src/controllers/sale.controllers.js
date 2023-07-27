@@ -27,7 +27,6 @@ export const createSale = async (req, res) => {
 
     //Devuelvo la respuesta
     res.status(201).json({ savedSale });
-    
   } catch (error) {
     // Manejo del error
     res.status(400).json({ message: error.message });
@@ -38,11 +37,34 @@ export const createSale = async (req, res) => {
 
 export const getSales = async (req, res) => {
   let body = req.body;
-  const { userID } = body;
-  try {
-    const sales = await Sale.find({ user: userID });
-    res.json(sales);
-  } catch (error) {
-    res.status(500).json({ message: "Error interno del servidor" });
+  const { userID, raceID } = body;
+  if (userID === "" && raceID === "") {
+    try {
+      const sales = await Sale.find();
+      res.json(sales);
+    } catch (error) {
+      res.status(500).json({ message: "Error interno del servidor" });
+    }
+  } else if (userID !== "" && raceID === "") {
+    try {
+      const sales = await Sale.find({ user: userID });
+      res.json(sales);
+    } catch (error) {
+      res.status(500).json({ message: "Error interno del servidor" });
+    }
+  } else if (userID === "" && raceID !== "") {
+    try {
+      const sales = await Sale.find({ race: raceID });
+      res.json(sales);
+    } catch (error) {
+      res.status(500).json({ message: "Error interno del servidor" });
+    }
+  } else if (userID !== "" && raceID !== "") {
+    try {
+      const sales = await Sale.find({ race: raceID, user: userID });
+      res.json(sales);
+    } catch (error) {
+      res.status(500).json({ message: "Error interno del servidor" });
+    }
   }
 };

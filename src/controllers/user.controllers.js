@@ -3,12 +3,23 @@ import RegisterData from "../models/RegisterData";
 import User from "../models/Users";
 import nodemailer from "nodemailer";
 
-export const getAllUsers = async (req, res) => {
-  try {
-    const users = await User.find();
-    res.json(users);
-  } catch (error) {
-    res.status(500).json({ message: "Server error" });
+export const getUsers = async (req, res) => {
+  const { userID } = req.body;
+
+  if (userID === "") {
+    try {
+      const users = await User.find();
+      res.json(users);
+    } catch (error) {
+      res.status(500).json({ message: "Server error" });
+    }
+  } else {
+    try {
+      const users = await User.find({ _id: userID });
+      res.json(users);
+    } catch (error) {
+      res.status(500).json({ message: "Server error" });
+    }
   }
 };
 
@@ -121,7 +132,7 @@ export const payingUsersTest = async (req, res) => {
       { $inc: { [`registeredPayments.${distance}`]: 1 } }
     );
     console.log(`Pagos registrados actualizados para la distancia ${distance}`);
-    res.send(200)
+    res.send(200);
   } catch (error) {
     console.error("Error al actualizar los pagos registrados:", error);
     throw error;

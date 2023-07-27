@@ -1,7 +1,7 @@
 import { Router } from "express";
 import {
   addUserToRace,
-  getAllUsers,
+  getUsers,
   getRegistrationCount,
   getUserRaceData,
   payingUsersTest,
@@ -12,7 +12,7 @@ const router = Router();
 
 router.get("/registeredUsers", [verifyToken, isAdmin], getRegistrationCount);
 
-router.get("/getUsers", [verifyToken, isAdmin], getAllUsers);
+router.post("/getUsers", [verifyToken, isAdmin], getUsers);
 
 router.get("/getUserRaceData/:userId", verifyToken, getUserRaceData);
 

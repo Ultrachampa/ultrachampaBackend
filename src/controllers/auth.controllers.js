@@ -9,7 +9,23 @@ import RegisterData from "../models/RegisterData";
 
 export const userRegister = async (req, res) => {
   let body = req.body;
-  let { name, lastname, email, password, gender, location, role } = body;
+  let {
+    name,
+    lastname,
+    email,
+    password,
+    gender,
+    location,
+    role,
+    primeraCarrera,
+    primerViajeAlLugar,
+    diasAlojamiento,
+    comoLlegas,
+    personasNoParticipantes,
+    comoTeEnteraste,
+    carrerasAlAnio,
+    basesYCondiciones,
+  } = body;
   try {
     // Verificar si el correo electrónico ya está registrado
     const existingUser = await User.findOne({ email });
@@ -26,6 +42,14 @@ export const userRegister = async (req, res) => {
       gender,
       location,
       role,
+      primeraCarrera,
+      primerViajeAlLugar,
+      diasAlojamiento,
+      comoLlegas,
+      personasNoParticipantes,
+      comoTeEnteraste,
+      carrerasAlAnio,
+      basesYCondiciones,
     });
     if (role) {
       const foundRoles = await Role.find({ name: { $in: role } });
@@ -103,6 +127,14 @@ export const userLogin = async (req, res) => {
     emergencyContact: userFound.emergencyContact,
     isCeliac: userFound.isCeliac,
     alergic: userFound.alergic,
+    primeraCarrera: userFound.primeraCarrera,
+    primerViajeAlLugar: userFound.primerViajeAlLugar,
+    diasAlojamiento: userFound.diasAlojamiento,
+    comoLlegas: userFound.comoLlegas,
+    personasNoParticipantes: userFound.personasNoParticipantes,
+    comoTeEnteraste: userFound.comoTeEnteraste,
+    carrerasAlAnio: userFound.carrerasAlAnio,
+    basesYCondiciones: userFound.basesYCondiciones,
   });
 };
 
@@ -176,6 +208,14 @@ export const editDataFromUser = async (req, res) => {
     distance,
     team,
     birthdate,
+    primeraCarrera,
+    primerViajeAlLugar,
+    diasAlojamiento,
+    comoLlegas,
+    personasNoParticipantes,
+    comoTeEnteraste,
+    carrerasAlAnio,
+    basesYCondiciones,
   } = req.body;
   const userId = req.params.id; // se pasa el ID del usuario como parámetro en la URL
 
@@ -197,6 +237,14 @@ export const editDataFromUser = async (req, res) => {
         distance,
         team,
         birthdate,
+        primeraCarrera,
+        primerViajeAlLugar,
+        diasAlojamiento,
+        comoLlegas,
+        personasNoParticipantes,
+        comoTeEnteraste,
+        carrerasAlAnio,
+        basesYCondiciones,
       },
       { new: true } // para que devuelva el usuario actualizado en vez del anterior
     );
