@@ -75,10 +75,20 @@ export const createFee = async (
 export const getFees = async (req, res) => {
   let body = req.body;
   const { saleId } = body;
-  try {
-    const fees = await Fee.find({ sale: saleId });
-    res.json(fees);
-  } catch (error) {
-    res.status(500).json({ message: "Error interno del servidor" });
+
+  if (saleId === "") {
+    try {
+      const fees = await Fee.find();
+      res.json(fees);
+    } catch (error) {
+      res.status(500).json({ message: "Error interno del servidor" });
+    }
+  } else if (saleId !== "") {
+    try {
+      const fees = await Fee.find({ sale: saleId });
+      res.json(fees);
+    } catch (error) {
+      res.status(500).json({ message: "Error interno del servidor" });
+    }
   }
 };
