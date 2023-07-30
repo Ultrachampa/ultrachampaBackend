@@ -8,7 +8,6 @@ mercadopago.configure({
 });
 
 export const payProduct = async (req, res) => {
-
   const raceId = req.params.id; // se pasa el ID de la carrera como parámetro en la URL
   const { discountCode, price, successUrl, failureUrl, pendingUrl } = req.body;
 
@@ -75,25 +74,31 @@ export const payFee = async (req, res) => {
   try {
     var now = new Date(); //fecha actual
     var expireDate = new Date(fee.expireDate); //fecha de vencimiento de la cuota
-    var expireDateLink = new Date(fee.linkGeneratedDate); //fecha de vencimiento del link
+    var expireDateLink = (fee.linkGeneratedDate === null
+      ? new Date()
+      : new Date(fee.linkGeneratedDate)); //fecha de vencimiento del link
 
+      
     //Valido la fecha de vencimiento de la cuota
     if (now > expireDate) {
-      const filterActual = { _id: feeID };
-      const updateActual = { isActive: false, isPayed: false };
-      await Fee.findOneAndUpdate(filterActual, updateActual);
+      await Fee.findOneAndUpdate(
+        { _id: feeID },
+        { isActive: false, isPayed: false },
+        { new: true }
+      );
       throw new Error("La cuota ha expirado.");
 
       //Valido la fecha de vencimiento del link generado
     } else if (now > expireDateLink) {
-      const filterActual = { _id: feeID };
-      const updateActual = { linkGeneratedDate: null };
-      await Fee.findOneAndUpdate(filterActual, updateActual);
+      await Fee.findOneAndUpdate(
+        { _id: feeID },
+        { linkGeneratedDate: null },
+        { new: true }
+      );
       throw new Error(
         "El link generado ha expirado, vuelve a realizar la solicitud."
       );
     } else {
-
       //Guardo la fecha de vencimiento del para el link que se va a generar
       var linkGeneratedDate = new Date();
       linkGeneratedDate.setDate(linkGeneratedDate.getDate() + 2);
@@ -108,7 +113,7 @@ export const payFee = async (req, res) => {
             description: fee.description,
             unit_price: fee.feePrice,
             quantity: 1,
-            site_id: "MLA"
+            site_id: "MLA",
           },
         ],
         back_urls: {
@@ -134,7 +139,10 @@ export const payFee = async (req, res) => {
       //Guardo al fecha de expiración del link en la BDD
       const filterActual = { _id: feeID };
       const updateActual = { linkGeneratedDate: linkGeneratedDate };
-      await Fee.findOneAndUpdate(filterActual, updateActual);
+      await Fee.findOneAndUpdate(
+        { _id: feeID },
+        { linkGeneratedDate: linkGeneratedDate }
+      );
     }
   } catch (error) {
     console.error("Error al generar el pago:", error);
