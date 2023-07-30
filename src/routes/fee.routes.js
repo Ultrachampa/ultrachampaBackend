@@ -1,10 +1,10 @@
 import { Router } from "express";
 import { getFees } from "../controllers/fee.controllers";
 
-import { verifyToken, isAdmin } from "../middlewares/verifyToken";
+import { verifyToken } from "../middlewares/verifyToken";
 
 const router = Router();
 
-router.post("/getFees", [verifyToken, isAdmin], getFees);
+router.post("/getFees", [verifyToken], getFees);
 
 export default router;

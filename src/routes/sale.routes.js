@@ -1,11 +1,11 @@
 import { Router } from "express";
 import { createSale, getSales } from "../controllers/sale.controllers";
 
-import { verifyToken, isAdmin } from "../middlewares/verifyToken";
+import { verifyToken } from "../middlewares/verifyToken";
 
 const router = Router();
 
-router.post("/createSale", [verifyToken, isAdmin], createSale);
-router.post("/getSale", [verifyToken, isAdmin], getSales);
+router.post("/createSale", [verifyToken], createSale);
+router.post("/getSale", [verifyToken], getSales);
 
 export default router;
