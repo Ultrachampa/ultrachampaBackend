@@ -117,9 +117,9 @@ export const payFee = async (req, res) => {
           },
         ],
         back_urls: {
-          success: "/success",
-          failure: "/failure",
-          pending: "/pending",
+          success: "https://www.puntotrail.com/finalizacion",
+          failure: "https://www.puntotrail.com/inscription",
+          pending: "https://www.puntotrail.com/inscription",
         },
         auto_return: "approved",
         notification_url: `/webhookMP/:${feeID}`,
