@@ -12,7 +12,7 @@ const router = Router();
 
 router.get("/registeredUsers", [verifyToken, isAdmin], getRegistrationCount);
 
-router.post("/getUsers", [verifyToken, isAdmin], getUsers);
+router.post("/getUsers", [verifyToken], getUsers);
 
 router.get("/getUserRaceData/:userId", verifyToken, getUserRaceData);
 
