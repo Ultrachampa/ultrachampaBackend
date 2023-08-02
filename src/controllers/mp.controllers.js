@@ -112,7 +112,7 @@ export const payFee = async (req, res) => {
             title: fee.title,
             id: fee._id,
             description: fee.description,
-            unit_price: 1000,
+            unit_price: fee.feePrice,
             quantity: 1,
             category_id: "travels",
             currency_id: "ARS",
@@ -126,6 +126,7 @@ export const payFee = async (req, res) => {
         auto_return: "approved",
         notification_url: `/webhookMP/:${feeID}`,
         date_of_expiration: json_linkExpireDate,
+        statement_descriptor: "PUNTOTRAIL.UTMB"
       };
 
       // Crear la preferencia de pago en Mercado Pago
