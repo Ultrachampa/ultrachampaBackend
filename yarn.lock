@@ -2674,6 +2674,11 @@ data-uri-to-buffer@^4.0.0:
   resolved "https://registry.yarnpkg.com/data-uri-to-buffer/-/data-uri-to-buffer-4.0.1.tgz#d8feb2b2881e6a4f58c2e08acfd0e2834e26222e"
   integrity sha512-0R9ikRb668HB7QDxT1vkpuUBtqc53YyAwMwGeUFKRojY/NWKvdZ+9UYtRfGmhqNbRkTSVpMbmyhXipFFv2cb/A==
 
+dayjs@^1.11.7:
+  version "1.11.9"
+  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.11.9.tgz#9ca491933fadd0a60a2c19f6c237c03517d71d1a"
+  integrity sha512-QvzAURSbQ0pKdIye2txOzNaHmxtUBXerpY0FJsFXUMKbIZeFm5ht1LS/jFsrncjnmtv8HsG0W2g6c0zUjZWmpA==
+
 deasync@^0.1.0:
   version "0.1.28"
   resolved "https://registry.npmjs.org/deasync/-/deasync-0.1.28.tgz"
@@ -4740,14 +4745,14 @@ memory-pager@^1.0.2:
   resolved "https://registry.npmjs.org/memory-pager/-/memory-pager-1.5.0.tgz"
   integrity sha512-ZS4Bp4r/Zoeq6+NLJpP+0Zzm0pR8whtGPf1XExKLJBAczGMnSi3It14OiNCStjQjM6NU1okjQGSxgEZN8eBYKg==
 
-mercadopago@^1.5.16:
-  version "1.5.16"
-  resolved "https://registry.npmjs.org/mercadopago/-/mercadopago-1.5.16.tgz"
-  integrity sha512-Qb0rxNjdMBtb3Xu0zbuYtn0j1RB6UVQVJy/AK7Noy+Qiosqb3COS0Wbmq/30s60kVahCD3/+r+gO3yk/OwGB2w==
+mercadopago@^1.5.17:
+  version "1.5.17"
+  resolved "https://registry.yarnpkg.com/mercadopago/-/mercadopago-1.5.17.tgz#a73a0c2b4e92a561c5d20caa6608c02816155500"
+  integrity sha512-ghi5JS3MzblhuqgMZC5ge0q/FcjNnJjiZDWe33K29wrVb0E+rNeTU0ta/EODnXbD8zFVu2la0Hr0OMx38/PrWA==
   dependencies:
     ajv "^6.12.3"
     bluebird "3.4.7"
-    moment "^2.29.4"
+    dayjs "^1.11.7"
     request "^2.88.0"
     request-etag "2.0.3"
     uuid "3.0.1"
@@ -5196,11 +5201,6 @@ mlly@^1.1.0, mlly@^1.2.0:
     pathe "^1.1.1"
     pkg-types "^1.0.3"
     ufo "^1.1.2"
-
-moment@^2.29.4:
-  version "2.29.4"
-  resolved "https://registry.npmjs.org/moment/-/moment-2.29.4.tgz"
-  integrity sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==
 
 mongodb-connection-string-url@^2.6.0:
   version "2.6.0"
