@@ -1,4 +1,4 @@
-import mercadopago from "mercadopago";
+const mercadopago = require("mercadopago");
 import Race from "../models/Race";
 import RegisterData from "../models/RegisterData";
 import DiscountCode from "../models/DiscountCodes";
@@ -74,11 +74,11 @@ export const payFee = async (req, res) => {
   try {
     var now = new Date(); //fecha actual
     var expireDate = new Date(fee.expireDate); //fecha de vencimiento de la cuota
-    var expireDateLink = (fee.linkGeneratedDate === null
-      ? new Date()
-      : new Date(fee.linkGeneratedDate)); //fecha de vencimiento del link
+    var expireDateLink =
+      fee.linkGeneratedDate === null
+        ? new Date()
+        : new Date(fee.linkGeneratedDate); //fecha de vencimiento del link
 
-      
     //Valido la fecha de vencimiento de la cuota
     if (now > expireDate) {
       await Fee.findOneAndUpdate(
@@ -110,10 +110,12 @@ export const payFee = async (req, res) => {
         items: [
           {
             title: fee.title,
+            id: fee._id,
             description: fee.description,
-            unit_price: fee.feePrice,
+            unit_price: 1000,
             quantity: 1,
-            site_id: "MLA",
+            category_id: "travels",
+            currency_id: "ARS",
           },
         ],
         back_urls: {
