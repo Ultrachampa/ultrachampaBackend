@@ -21,3 +21,18 @@ export const getTeams = async (req, res) => {
     }
   }
 };
+
+export const verifyTeam = async (req, res) => {
+  let body = req.body;
+  const { teamName } = body;
+  try {
+    const team = await Team.find({ name: { $regex: teamName, $options: "i" } });
+
+    if (!team) {
+      res.status(202).json({ message: "Team no encontrado o mal escrito" });
+    }
+    res.json(team);
+  } catch (error) {
+    res.status(500).json({ message: "Error interno del servidor" });
+  }
+};
