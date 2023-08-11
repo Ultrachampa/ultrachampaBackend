@@ -164,20 +164,23 @@ export const receiveWebhook = async (req, res) => {
       const data = await mercadopago.payment.findById(payment["data.id"]);
       //Establezco los filtros y los parámetros a actualizar
       //Cambio los valores de la cuota ingresada: isActive -> false (deshabilita el boton pagar), isPayed -> true (fue pagada.)
-      const filterActual = { _id: feeID, sale: feeSaleID };
-      const updateActual = { isActive: false, isPayed: true };
-      const actualFee = await Fee.findOneAndUpdate(filterActual, updateActual);
-      //await actualFee.save();
-      //Cambio los valores de la cuota siguiente: isActive -> true (habilita el boton pagar), isPayed -> false (no fue pagada.)
+      if(data.body.status === "approved"){
+        const filterActual = { _id: feeID, sale: feeSaleID };
+        const updateActual = { isActive: false, isPayed: true };
+        const actualFee = await Fee.findOneAndUpdate(filterActual, updateActual);
+        //await actualFee.save();
+        //Cambio los valores de la cuota siguiente: isActive -> true (habilita el boton pagar), isPayed -> false (no fue pagada.)
 
-      const filterNext = { sale: feeSaleID, numFee: numFee + 1 };
-      const updateNext = { isActive: true, isPayed: false };
-      const nextFee = await Fee.findOneAndUpdate(filterNext, updateNext);
-      //await nextFee.save();
-      //Devuelvo las respuestas
-      return res.sendStatus(200);
-
-
+        const filterNext = { sale: feeSaleID, numFee: numFee + 1 };
+        const updateNext = { isActive: true, isPayed: false };
+        const nextFee = await Fee.findOneAndUpdate(filterNext, updateNext);
+        //await nextFee.save();
+        //Devuelvo las respuestas
+        
+        return res.sendStatus(200);
+      } else {
+        return res.sendStatus(400).json({error: "El pago no ha sido aprobado."})
+      }
     }
   } catch (error) {
     console.log(error);
