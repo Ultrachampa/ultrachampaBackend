@@ -5,7 +5,8 @@ export const createFee = async (
   feesAmount,
   lastInsertID,
   price,
-  description
+  description,
+  name
 ) => {
   const sale = lastInsertID; //ID de la venta recién ingresada
   let feePrice = Math.round(price / feesAmount, -2); //Obtengo el precio de cada cuota
@@ -20,7 +21,7 @@ export const createFee = async (
     if (thisMonth >= 12) {
       //Si la fecha sobrepasa diciembre, es decir, con mes 12, empieza registrar las fechas de venc en el siguiente año
       let expireDate = now.getUTCFullYear() + 1 + "-" + newMonth++ + "-" + 10; //Concateno el string para que el vencimiento sea siempre el día 10 de cada mes
-      var title = "Cuota num. " + index;
+      var title = "Cuota num " + index + " - " + name;
       var numFee = index;
       //comienzo a insertar el registro en la tabla FEE (cuotas)
       const newFee = new Fee({
@@ -45,7 +46,7 @@ export const createFee = async (
     } else {
       //Si la fecha de venc de cada cuota sigue dentro del mismo año, se ejecuta lo siguiente
       let expireDate = now.getUTCFullYear() + "-" + (thisMonth + 1) + "-" + 10;
-      var title = "Cuota num. " + index;
+      var title = "Cuota num " + index + " - " + name;
       var numFee = index;
 
       //comienzo a insertar el registro en la tabla FEE (cuotas)
