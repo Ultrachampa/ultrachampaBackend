@@ -23,7 +23,7 @@ export const createSale = async (req, res) => {
 
     //Obtengo el ultimo id ingresado para enviarselo a la creacion de cuotas
     var lastInsertID = lastInsertSale[0]._id;
-    createFee(feesAmount, lastInsertID, price, description);
+    createFee(feesAmount, lastInsertID, price, description, name);
 
     //Devuelvo la respuesta
     res.status(201).json({ savedSale });
