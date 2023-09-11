@@ -25,7 +25,7 @@
     "jsonwebtoken": "^9.0.1",
     "mercadopago": "^1.5.17",
     "mongoose": "^7.1.0",
-    "node-fetch": "^3.3.2",
+    "node-fetch": "2.6.7",
     "nodemailer": "^6.9.2",
     "nodemon": "^2.0.22",
     "typescript": "^5.0.4",

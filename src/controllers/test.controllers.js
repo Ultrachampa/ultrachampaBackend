@@ -1,4 +1,6 @@
 // import fetch from "node-fetch";
+const fetch = require("node-fetch");
+
 // function getDataExternService() {
 //     const datos = {
 //         email : "Veroalas@gmail.com",
@@ -19,3 +21,23 @@
 
 //   getDataExternService()
 
+export const test = async (req, res) => {
+  const { email, firstName, lastName, dob } = req.body;
+  const datos = {
+    email: email,
+    firstName: firstName,
+    lastName: lastName,
+    dob: dob,
+  };
+
+  const url = `https://api.utmb.world/registration/checkActiveStatus`;
+
+  const response = await fetch(url, {
+    method: "POST",
+    body: JSON.stringify(datos),
+    headers: { "Content-Type": "application/json" },
+  });
+
+  res.send(response);
+  console.log(response)
+};

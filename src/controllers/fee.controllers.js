@@ -18,9 +18,8 @@ export const createFee = async (
     const now = new Date(); //fecha de hoy
     let thisMonth = now.getUTCMonth() + index; //obtengo el mes; El método getUTHMonth, comienza con enero = 0, por lo cual le sumo el indice
 
-    if (thisMonth >= 12) {
-      //Si la fecha sobrepasa diciembre, es decir, con mes 12, empieza registrar las fechas de venc en el siguiente año
-      let expireDate = now.getUTCFullYear() + 1 + "-" + newMonth++ + "-" + 10; //Concateno el string para que el vencimiento sea siempre el día 10 de cada mes
+    if (index < 2) {
+      let expireDate = now.setDate(now.getDate() + 3);
       var title = "Cuota num " + index + " - " + name;
       var numFee = index;
       //comienzo a insertar el registro en la tabla FEE (cuotas)
@@ -34,39 +33,57 @@ export const createFee = async (
       });
 
       await newFee.save(); //Si todo esta bien, creo el nuevo registro
-
-      if (index < 2) {
-        const lastInsertFee = await Fee.find({}).sort({ _id: -1 }).limit(1);
-        const lastInsertIDFee = lastInsertFee[0]._id;
-
-        const filterActual = { _id: lastInsertIDFee };
-        const updateActual = { isActive: true };
-        await Fee.findOneAndUpdate(filterActual, updateActual);
-      }
     } else {
-      //Si la fecha de venc de cada cuota sigue dentro del mismo año, se ejecuta lo siguiente
-      let expireDate = now.getUTCFullYear() + "-" + (thisMonth + 1) + "-" + 10;
-      var title = "Cuota num " + index + " - " + name;
-      var numFee = index;
+      if (thisMonth >= 12) {
+        //Si la fecha sobrepasa diciembre, es decir, con mes 12, empieza registrar las fechas de venc en el siguiente año
+        let expireDate = now.getUTCFullYear() + 1 + "-" + newMonth++ + "-" + 10; //Concateno el string para que el vencimiento sea siempre el día 10 de cada mes
+        var title = "Cuota num " + index + " - " + name;
+        var numFee = index;
+        //comienzo a insertar el registro en la tabla FEE (cuotas)
+        const newFee = new Fee({
+          title,
+          description,
+          sale,
+          feePrice,
+          expireDate,
+          numFee,
+        });
 
-      //comienzo a insertar el registro en la tabla FEE (cuotas)
-      const newFee = new Fee({
-        title,
-        description,
-        sale,
-        feePrice,
-        expireDate,
-        numFee,
-      });
+        await newFee.save(); //Si todo esta bien, creo el nuevo registro
 
-      await newFee.save(); //Si todo esta bien, creo el nuevo registro
+        if (index < 2) {
+          const lastInsertFee = await Fee.find({}).sort({ _id: -1 }).limit(1);
+          const lastInsertIDFee = lastInsertFee[0]._id;
 
-      if (index < 2) {
-        const lastInsertFee = await Fee.find({}).sort({ _id: -1 }).limit(1);
-        const lastInsertIDFee = lastInsertFee[0]._id;
-        const filterActual = { _id: lastInsertIDFee };
-        const updateActual = { isActive: true };
-        await Fee.findOneAndUpdate(filterActual, updateActual);
+          const filterActual = { _id: lastInsertIDFee };
+          const updateActual = { isActive: true };
+          await Fee.findOneAndUpdate(filterActual, updateActual);
+        }
+      } else {
+        //Si la fecha de venc de cada cuota sigue dentro del mismo año, se ejecuta lo siguiente
+        let expireDate = now.getUTCFullYear() + "-" + thisMonth + "-" + 10;
+        var title = "Cuota num " + index + " - " + name;
+        var numFee = index;
+
+        //comienzo a insertar el registro en la tabla FEE (cuotas)
+        const newFee = new Fee({
+          title,
+          description,
+          sale,
+          feePrice,
+          expireDate,
+          numFee,
+        });
+
+        await newFee.save(); //Si todo esta bien, creo el nuevo registro
+
+        if (index < 2) {
+          const lastInsertFee = await Fee.find({}).sort({ _id: -1 }).limit(1);
+          const lastInsertIDFee = lastInsertFee[0]._id;
+          const filterActual = { _id: lastInsertIDFee };
+          const updateActual = { isActive: true };
+          await Fee.findOneAndUpdate(filterActual, updateActual);
+        }
       }
     }
   }

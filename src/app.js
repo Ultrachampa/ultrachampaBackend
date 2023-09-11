@@ -12,6 +12,7 @@ import { createRoles } from "./libs/initialSetup";
 import teamRoutes from "./routes/team.routes";
 import teamMembersRoutes from "./routes/teamMembers.routes";
 import statsRoutes from "./routes/stats.routes";
+import test from "./routes/test.routes";
 import cors from "cors";
 
 const app = express();
@@ -36,5 +37,6 @@ app.use("/api/payment", mpRoutes);
 app.use("/api/teams", teamRoutes);
 app.use("/api/teamMembers", teamMembersRoutes);
 app.use("/api/stats", statsRoutes);
+app.use("/api/test", test);
 
 export default app;
