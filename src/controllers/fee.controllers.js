@@ -19,7 +19,7 @@ export const createFee = async (
     let thisMonth = now.getUTCMonth() + index; //obtengo el mes; El método getUTHMonth, comienza con enero = 0, por lo cual le sumo el indice
 
     if (index < 2) {
-      let expireDate = now.setDate(now.getDate() + 3);
+      let expireDate = now.setDate(now.getDate() + 3); //la primera cuota se paga al momento, pero se añaden 3 días adicionales a la fecha actual para evitar errores
       var title = "Cuota num " + index + " - " + name;
       var numFee = index;
       //comienzo a insertar el registro en la tabla FEE (cuotas)
@@ -32,9 +32,10 @@ export const createFee = async (
         numFee,
       });
 
+
       await newFee.save(); //Si todo esta bien, creo el nuevo registro
     } else {
-      if (thisMonth >= 12) {
+      if (thisMonth > 12) {
         //Si la fecha sobrepasa diciembre, es decir, con mes 12, empieza registrar las fechas de venc en el siguiente año
         let expireDate = now.getUTCFullYear() + 1 + "-" + newMonth++ + "-" + 10; //Concateno el string para que el vencimiento sea siempre el día 10 de cada mes
         var title = "Cuota num " + index + " - " + name;
@@ -48,6 +49,7 @@ export const createFee = async (
           expireDate,
           numFee,
         });
+
 
         await newFee.save(); //Si todo esta bien, creo el nuevo registro
 
