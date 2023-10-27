@@ -21,6 +21,44 @@ const fetch = require("node-fetch");
 
 //   getDataExternService()
 
+// export const test = async (req, res) => {
+//   const { email, firstName, lastName, dob, Auth } = req.body;
+//   const datos = {
+//     email: email,
+//     firstName: firstName,
+//     lastName: lastName,
+//     dob: dob,
+//   };
+
+//   // const url = `https://api.utmb.world/registration/checkActiveStatus?email=${datos.email}&lastName=${datos.lastName}firstName=${datos.firstName}&dob=${datos.dob}`;
+//   const url = "https://api.utmb.world/users/dashboard/member/simple";
+
+//   // const respuesta = await fetch(url, {
+//   //   method: "GET",
+//   //   headers: {
+//   //     Authorization: Auth,
+//   //   },
+//   // })
+//   //   .then((response) => response.json())
+//   //   .then((response) => return response)
+//   //   .catch((err) => console.log(err));
+
+//   // return respuesta;
+
+//   return fetch(url, {
+//     method: "GET",
+//     headers: {
+//       Authorization: Auth,
+//     },
+//   })
+//     .then((res) => res.json())
+//     .then((response) => {
+//       const data = response;
+//       console.log(response);
+//       return data;
+//     });
+// };
+
 export const test = async (req, res) => {
   const { email, firstName, lastName, dob, Auth } = req.body;
   const datos = {
@@ -30,59 +68,18 @@ export const test = async (req, res) => {
     dob: dob,
   };
 
-  // const url = `https://api.utmb.world/registration/checkActiveStatus?email=${datos.email}&lastName=${datos.lastName}firstName=${datos.firstName}&dob=${datos.dob}`;
-  const url = "https://api.utmb.world/users/dashboard/member/simple";
+  const url = `https://api.utmb.world/users/dashboard/member/simple`;
 
-  // const respuesta = await fetch(url, {
-  //   method: "GET",
-  //   headers: {
-  //     Authorization: Auth,
-  //   },
-  // })
-  //   .then((response) => response.json())
-  //   .then((response) => return response)
-  //   .catch((err) => console.log(err));
-
-  // return respuesta;
-
-  return fetch(url, {
+  const response = await fetch(url, {
     method: "GET",
     headers: {
       Authorization: Auth,
     },
-  })
-    .then((res) => res.json())
-    .then((response) => {
-      const data = response;
-      console.log(response);
-      return data;
-    });
+  });
+
+  res.send(response);
+  console.log(response);
 };
-
-// export const test = async (req, res) => {
-//   const { email, firstName, lastName, dob, Auth } = req.body;
-// const datos = {
-//   email: email,
-//   firstName: firstName,
-//   lastName: lastName,
-//   dob: dob,
-// };
-
-//   const url = `https://accounts.utmb.world/auth/realms/utmb-world/protocol/openid-connect/userinfo`;
-
-//   const response = await fetch(url, {
-//     method: "POST",
-//    // body: JSON.stringify(datos),
-//     headers: {
-//       "Content-Type": "application/x-www-form-urlencoded"
-//     ,'Authorization': 'Bearer ' + Auth
-
-//      },
-//   });
-
-//   res.send(response);
-//   console.log(response)
-// };
 
 // {
 //   "firstName": "Nico",
