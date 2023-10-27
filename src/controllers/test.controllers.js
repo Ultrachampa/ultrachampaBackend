@@ -31,10 +31,11 @@ export const test = async (req, res) => {
     dob: dob,
   };
 
-  const url = `https://api.utmb.world/registration/checkActiveStatus?email=${datos.email}&lastName=${datos.lastName}firstName=${datos.firstName}&dob=${datos.dob}`;
+   // const url = `https://api.utmb.world/registration/checkActiveStatus?email=${datos.email}&lastName=${datos.lastName}firstName=${datos.firstName}&dob=${datos.dob}`;
+  const url = `https://api.utmb.world/users/dashboard/member/simple`;
 
   const response = await fetch(url, {
-    method: "POST",
+    method: "GET",
     // body: JSON.stringify(datos),
     headers: {
       "Content-Type": "application/json",
