@@ -14,7 +14,7 @@ export const test = async (req, res) => {
       response.json();
     })
     .then((response) => {
-      console.log(response.json());
+      console.log(response);
     })
     .catch((err) => console.log(err));
 };
