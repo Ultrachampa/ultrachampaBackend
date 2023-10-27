@@ -36,7 +36,6 @@ export const test = async (req, res) => {
 
   const response = await fetch(url, {
     method: "GET",
-    // body: JSON.stringify(datos),
     headers: {
       "Content-Type": "application/json",
       'Authorization': Auth
@@ -44,7 +43,7 @@ export const test = async (req, res) => {
   });
 
   res.send(response);
-  console.log(response[0]);
+  console.log(response);
 };
 
 // export const test = async (req, res) => {
