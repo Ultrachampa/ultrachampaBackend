@@ -46,7 +46,7 @@ export const test = async (req, res) => {
   // return respuesta;
 
   return fetch(url, {
-    method: "POST",
+    method: "GET",
     headers: {
       Authorization: Auth,
     },
