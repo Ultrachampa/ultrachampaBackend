@@ -33,19 +33,14 @@ export const test = async (req, res) => {
   // const url = `https://api.utmb.world/registration/checkActiveStatus?email=${datos.email}&lastName=${datos.lastName}firstName=${datos.firstName}&dob=${datos.dob}`;
   const url = "https://api.utmb.world/users/dashboard/member/simple";
 
-  const respuesta = await fetch(url, {
+  await fetch(url, {
     method: "GET",
     headers: {
       Authorization: Auth,
     },
   })
     .then((response) => {
-      if (response !== null || response !== "") {
-        return response
-      }
+      return response.json();
     })
     .catch((err) => console.log(err));
-
-  console.log(respuesta);
-  // return respuesta;
 };
