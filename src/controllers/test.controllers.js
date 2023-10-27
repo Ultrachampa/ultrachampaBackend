@@ -33,17 +33,17 @@ export const test = async (req, res) => {
   // const url = `https://api.utmb.world/registration/checkActiveStatus?email=${datos.email}&lastName=${datos.lastName}firstName=${datos.firstName}&dob=${datos.dob}`;
   const url = "https://api.utmb.world/users/dashboard/member/simple";
 
-  const fetch = await fetch(url, {
+  const respuesta = await fetch(url, {
     method: "GET",
     headers: {
       Authorization: Auth,
     },
   })
-    .then((response) => response.status(200).json())
+    .then((response) => response.json())
     .then((json) => console.log(json))
     .catch((err) => console.log(err));
 
-    return fetch
+  return respuesta;
 };
 
 // export const test = async (req, res) => {
