@@ -22,7 +22,7 @@ const fetch = require("node-fetch");
 //   getDataExternService()
 
 export const test = async (req, res) => {
-  const { email, firstName, lastName, dob } = req.body;
+  const { email, firstName, lastName, dob, Auth } = req.body;
   const datos = {
     email: email,
     firstName: firstName,
@@ -35,7 +35,10 @@ export const test = async (req, res) => {
   const response = await fetch(url, {
     method: "POST",
     body: JSON.stringify(datos),
-    headers: { "Content-Type": "application/json" },
+    headers: { 
+      "Content-Type": "application/json",
+      "Authorization" : "Bearer " + Auth
+     },
   });
 
   res.send(response);
