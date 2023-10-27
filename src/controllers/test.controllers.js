@@ -38,7 +38,7 @@ export const test = (req, res) => {
       Authorization: Auth,
     },
   })
-    .then((response) => (res.send(response.text())))
+    .then((res) => (res.json()))
     .then((response) => {
       const data = response;
       console.log("data", data);
