@@ -42,6 +42,7 @@ export const test = async (req, res) => {
     .then((response) => response.json())
     .catch((err) => console.log(err));
 
+  console.log(respuesta);
   return respuesta;
 
   // return fetch(url, {
