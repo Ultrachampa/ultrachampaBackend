@@ -32,7 +32,7 @@ export const test = async (req, res) => {
   };
   const url = `https://api.utmb.world/registration/checkActiveStatus?email=${datos.email}&lastName=${datos.lastName}firstName=${datos.firstName}&dob=${datos.dob}`;
 
-  return fetch(url, {
+  return await fetch(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
