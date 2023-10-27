@@ -39,13 +39,12 @@ export const test = async (req, res) => {
     // body: JSON.stringify(datos),
     headers: {
       "Content-Type": "application/json",
-      'Authorization': 'Bearer ' +Auth
+      'Authorization': Auth
     },
   });
 
   res.send(response);
   console.log(response);
-  console.log("Auth",Auth );
 };
 
 // export const test = async (req, res) => {
