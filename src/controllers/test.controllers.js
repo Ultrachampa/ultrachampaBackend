@@ -33,17 +33,30 @@ export const test = async (req, res) => {
   // const url = `https://api.utmb.world/registration/checkActiveStatus?email=${datos.email}&lastName=${datos.lastName}firstName=${datos.firstName}&dob=${datos.dob}`;
   const url = "https://api.utmb.world/users/dashboard/member/simple";
 
-  const respuesta = await fetch(url, {
-    method: "GET",
+  // const respuesta = await fetch(url, {
+  //   method: "GET",
+  //   headers: {
+  //     Authorization: Auth,
+  //   },
+  // })
+  //   .then((response) => response.json())
+  //   .then((response) => return response)
+  //   .catch((err) => console.log(err));
+
+  // return respuesta;
+
+  return fetch(url, {
+    method: "POST",
     headers: {
       Authorization: Auth,
     },
   })
-    .then((response) => response.json())
-    .then((json) => console.log(json))
-    .catch((err) => console.log(err));
-
-  return respuesta;
+    .then((res) => res.json())
+    .then((response) => {
+      const data = response;
+      console.log(response);
+      return data;
+    });
 };
 
 // export const test = async (req, res) => {
