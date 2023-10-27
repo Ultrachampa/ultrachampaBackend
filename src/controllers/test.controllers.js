@@ -36,8 +36,8 @@ export const test = async (req, res) => {
     method: "POST",
     body: JSON.stringify(datos),
     headers: { 
-      "Content-Type": "application/json",
-      "Authorization" : "Bearer " + Auth
+      "Content-Type": "application/json"
+      ,"Authorization" : Auth
      },
   });
 
