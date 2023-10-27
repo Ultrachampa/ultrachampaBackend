@@ -43,8 +43,8 @@ export const test = async (req, res) => {
     },
   });
 
-  res.json(response);
-  console.log(response);
+  res.send(response);
+  console.log(response[0]);
 };
 
 // export const test = async (req, res) => {
