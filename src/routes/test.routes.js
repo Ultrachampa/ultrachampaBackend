@@ -3,6 +3,6 @@ import { test } from "../controllers/test.controllers";
 
 const router = Router();
 
-router.post("/test", test);
+router.get("/test", test);
 
 export default router;
