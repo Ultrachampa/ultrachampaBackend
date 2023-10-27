@@ -21,7 +21,7 @@ const fetch = require("node-fetch");
 
 //   getDataExternService()
 
-export const test = async (req, res) => {
+export const test = (req, res) => {
   const { email, firstName, lastName, dob, Auth } = req.body;
   // const datos = {
   //   email: email,
@@ -32,17 +32,20 @@ export const test = async (req, res) => {
 
   const url = "https://api.utmb.world/users/dashboard/member/simple";
 
-  const respuesta = await fetch(url, {
+  return fetch(url, {
     method: "GET",
     headers: {
       Authorization: Auth,
     },
   })
-    .then((response) => console.log("response fetch", response))
-    .catch((err) => console.log(err));
+    .then((res) => res.text())
+    .then((response) => {
+      const data = response;
+      console.log(response);
+      return data;
+    });
 
-  console.log("respuesta",respuesta);
-  return respuesta;
+
 };
 
 // export const test = async (req, res) => {
