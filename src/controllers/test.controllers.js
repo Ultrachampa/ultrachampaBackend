@@ -37,12 +37,11 @@ export const test = (req, res) => {
     headers: {
       Authorization: Auth,
     },
-  })
-    .then((res) => (res.json()))
-    .then((response) => {
-      const data = response;
-      console.log("data", data);
-    });
+  }).then((response) => {
+    const data = response;
+    console.log("data", data);
+    res.send(response.json());
+  });
 };
 
 // export const test = async (req, res) => {
