@@ -21,30 +21,6 @@ const fetch = require("node-fetch");
 
 //   getDataExternService()
 
-// export const test = async (req, res) => {
-//   const { email, firstName, lastName, dob, Auth } = req.body;
-
-//   const datos = {
-//     email: email,
-//     firstName: firstName,
-//     lastName: lastName,
-//     dob: dob,
-//   };
-//   const url = `https://api.utmb.world/registration/checkActiveStatus?email=${datos.email}&lastName=${datos.lastName}firstName=${datos.firstName}&dob=${datos.dob}`;
-
-//   return await fetch(url, {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//   })
-//     .then((res) => res.json())
-//     .then((response) => {
-//       const data = response;
-//       console.log(response);
-//       return data;
-//     });
-// };
 
 export const test = async (req, res) => {
   const { email, firstName, lastName, dob, Auth } = req.body;
@@ -55,11 +31,11 @@ export const test = async (req, res) => {
     dob: dob,
   };
 
-  const url = `https://api.utmb.world/registration/checkActiveStatus`;
+  const url = `https://api.utmb.world/registration/checkActiveStatus?email=${datos.email}&lastName=${datos.lastName}firstName=${datos.firstName}&dob=${datos.dob}`;
 
   const response = await fetch(url, {
     method: "POST",
-    body: JSON.stringify(datos),
+    // body: JSON.stringify(datos),
     headers: {
       "Content-Type": "application/json",
       'Authorization': Auth,
