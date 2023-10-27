@@ -39,7 +39,7 @@ export const test = async (req, res) => {
     // body: JSON.stringify(datos),
     headers: {
       "Content-Type": "application/json",
-      'Authorization': 'Bearer' +Auth
+      'Authorization': 'Bearer ' +Auth
     },
   });
 
