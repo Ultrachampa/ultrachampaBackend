@@ -1,46 +1,20 @@
-// import fetch from "node-fetch";
 const fetch = require("node-fetch");
 
-// function getDataExternService() {
-//     const datos = {
-//         email : "Veroalas@gmail.com",
-//         firstName: "Veronica",
-//         lastName: "Alas",
-//         dob: "1978-08-21"
-//     }
-//     const url = `https://api.utmb.world/registration/checkActiveStatus?email=${datos.email}&lastName=${datos.lastName}firstName=${datos.firstName}&dob=${datos.dob}`
-
-//     return fetch(url, {method: 'POST'})
-//     .then((res) => res.json())
-//     .then((response) => {
-//       const data = response;
-//       console.log(response)
-//       return data;
-//     })
-//   }
-
-//   getDataExternService()
-
 export const test = async (req, res) => {
-  const { email, firstName, lastName, dob, Auth } = req.body;
-  // const datos = {
-  //   email: email,
-  //   firstName: firstName,
-  //   lastName: lastName,
-  //   dob: dob,
-  // };
-
-  // const url = `https://api.utmb.world/registration/checkActiveStatus?email=${datos.email}&lastName=${datos.lastName}firstName=${datos.firstName}&dob=${datos.dob}`;
+  const { Auth } = req.body;
   const url = "https://api.utmb.world/users/dashboard/member/simple";
 
-  await fetch(url, {
+  return await fetch(url, {
     method: "GET",
     headers: {
       Authorization: Auth,
     },
   })
     .then((response) => {
-      return response.json();
+      response.json();
+    })
+    .then((response) => {
+      console.log(response.json());
     })
     .catch((err) => console.log(err));
 };
