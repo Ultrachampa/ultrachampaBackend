@@ -22,6 +22,7 @@ const fetch = require("node-fetch");
 //   getDataExternService()
 
 export const test = (req, res) => {
+  var respuesta = "";
   const { email, firstName, lastName, dob, Auth } = req.body;
   // const datos = {
   //   email: email,
@@ -32,20 +33,19 @@ export const test = (req, res) => {
 
   const url = "https://api.utmb.world/users/dashboard/member/simple";
 
-  return fetch(url, {
+  fetch(url, {
     method: "GET",
     headers: {
       Authorization: Auth,
     },
   })
-    .then((res) => res.text())
+    .then((res) => (respuesta = res))
     .then((response) => {
       const data = response;
-      console.log(response);
-      return data;
+      console.log("data", data);
     });
 
-
+  return respuesta;
 };
 
 // export const test = async (req, res) => {
