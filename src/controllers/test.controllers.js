@@ -22,7 +22,6 @@ const fetch = require("node-fetch");
 //   getDataExternService()
 
 export const test = (req, res) => {
-  var respuesta = "";
   const { email, firstName, lastName, dob, Auth } = req.body;
   // const datos = {
   //   email: email,
@@ -39,7 +38,7 @@ export const test = (req, res) => {
       Authorization: Auth,
     },
   })
-    .then((response) => (respuesta = res.json(response)))
+    .then((response) => (res.send(response.text())))
     .then((response) => {
       const data = response;
       console.log("data", data);
