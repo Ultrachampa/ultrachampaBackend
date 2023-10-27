@@ -39,7 +39,7 @@ export const test = (req, res) => {
       Authorization: Auth,
     },
   })
-    .then((response) => (respuesta = res.send(response.json())))
+    .then((response) => (respuesta = res.json(response)))
     .then((response) => {
       const data = response;
       console.log("data", data);
