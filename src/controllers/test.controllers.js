@@ -45,6 +45,7 @@ export const test = async (req, res) => {
 
   res.send(response);
   console.log(response);
+  console.log("Auth",Auth );
 };
 
 // export const test = async (req, res) => {
