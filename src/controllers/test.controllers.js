@@ -37,7 +37,6 @@ export const test = async (req, res) => {
   const response = await fetch(url, {
     method: "GET",
     headers: {
-      "Content-Type": "application/json",
       'Authorization': Auth
     },
   });
