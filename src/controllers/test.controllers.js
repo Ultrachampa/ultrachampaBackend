@@ -21,20 +21,44 @@ const fetch = require("node-fetch");
 
 //   getDataExternService()
 
+// export const test = async (req, res) => {
+//   const { email, firstName, lastName, dob, Auth } = req.body;
+//   const datos = {
+//     email: email,
+//     firstName: firstName,
+//     lastName: lastName,
+//     dob: dob,
+//   };
+
+//   const url = `https://api.utmb.world/users/dashboard/member/simple`;
+
+//   const response = await fetch(url, {
+//     method: "POST",
+//     body: JSON.stringify(datos),
+//     headers: { 
+//       "Content-Type": "application/json"
+//       ,"Authorization" : Auth
+//      },
+//   });
+
+//   res.send(response);
+//   console.log(response)
+// };
+
 export const test = async (req, res) => {
   const { email, firstName, lastName, dob, Auth } = req.body;
-  const datos = {
-    email: email,
-    firstName: firstName,
-    lastName: lastName,
-    dob: dob,
-  };
+  // const datos = {
+  //   email: email,
+  //   firstName: firstName,
+  //   lastName: lastName,
+  //   dob: dob,
+  // };
 
-  const url = `https://api.utmb.world/registration/checkActiveStatus`;
+  const url = `https://api.utmb.world/users/dashboard/member/simple`;
 
   const response = await fetch(url, {
     method: "POST",
-    body: JSON.stringify(datos),
+   // body: JSON.stringify(datos),
     headers: { 
       "Content-Type": "application/json"
       ,"Authorization" : Auth
