@@ -38,12 +38,12 @@ export const test = (req, res) => {
       Authorization: Auth,
     },
   }).then((response) => {
-    const data = response;
+    const data = response.json();
     console.log("data", data);
     // res.json(response);
   })
   .then((response) => {
-    res.json(response);
+    res.json(response.json());
   })
   ;
 };
