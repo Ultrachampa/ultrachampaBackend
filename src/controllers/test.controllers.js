@@ -40,8 +40,12 @@ export const test = (req, res) => {
   }).then((response) => {
     const data = response;
     console.log("data", data);
-    res.send(response.json());
-  });
+    // res.json(response);
+  })
+  .then((response) => {
+    res.json(response);
+  })
+  ;
 };
 
 // export const test = async (req, res) => {
