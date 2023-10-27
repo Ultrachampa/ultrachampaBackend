@@ -39,13 +39,13 @@ export const test = (req, res) => {
       Authorization: Auth,
     },
   })
-    .then((res) => (respuesta = res))
+    .then((resp) => (respuesta = resp.json()))
     .then((response) => {
       const data = response;
       console.log("data", data);
     });
 
-  return respuesta;
+  res.send(respuesta);
 };
 
 // export const test = async (req, res) => {
