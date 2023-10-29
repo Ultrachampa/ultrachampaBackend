@@ -14,6 +14,7 @@ import teamMembersRoutes from "./routes/teamMembers.routes";
 import statsRoutes from "./routes/stats.routes";
 import test from "./routes/test.routes";
 import cors from "cors";
+import utmb_api from "./routes/utmb_api.routes"
 
 const app = express();
 createRoles();
@@ -38,5 +39,6 @@ app.use("/api/teams", teamRoutes);
 app.use("/api/teamMembers", teamMembersRoutes);
 app.use("/api/stats", statsRoutes);
 app.use("/api/test", test);
+app.use("/api/utmb_api", utmb_api);
 
 export default app;
