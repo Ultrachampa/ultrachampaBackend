@@ -1,6 +1,8 @@
 
 export const memberSimple = async (req, res) => {
     const { authToken } = req.body;
+  var respuesta = "";
+
     const url = "https://api.utmb.world/users/dashboard/member/simple";
   
    await fetch(url, {
@@ -21,6 +23,8 @@ export const memberSimple = async (req, res) => {
 
   export const checkActiveStatus = async (req, res) => {
   const { email, firstName, lastName, dob} = req.body;
+  var respuesta = "";
+
   const datos = {
     email: email,
     firstName: firstName,
