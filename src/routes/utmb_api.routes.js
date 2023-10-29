@@ -3,6 +3,8 @@ import {
   memberSimple,
   checkActiveStatus,
 } from "../controllers/utmb_api.controllers";
+import { verifyToken } from "../middlewares/verifyToken";
+
 
 const router = Router();
 
