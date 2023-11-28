@@ -64,9 +64,9 @@ export const getTokenApi = async (req, res) => {
   await fetch(url, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
+      "Content-Type": "application/x-www-form-urlencoded",
     },
-    body: JSON.stringify(datos),
+    body: datos,
   })
     .then((res) => (respuesta = res.text()))
     .then((response) => {
