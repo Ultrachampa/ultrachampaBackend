@@ -53,8 +53,8 @@ export const checkActiveStatus = async (req, res) => {
 export const getTokenApi = async (req, res) => {
   var respuesta = "";
   const datos = {
-    username: "nicoalgo@hotmail.com",
-    password: "Holanico09!",
+    username: "trailpunto@gmail.com",
+    password: "Nolivera09!",
     client_id: "valholl",
     grant_type: "password",
   };
