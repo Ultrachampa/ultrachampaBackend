@@ -210,13 +210,15 @@ export const receiveWebhook = async (req, res) => {
       if (data.body.status === "approved") {
         if (numFee === 3) {
           //INSERT O AVISO A API DE UMTB EL REGISTRO DE UNA CARRERA
-          var tokenApi = getTokenApi();
-          registerRaceApi(tokenApi, body, utmbRaceId);
+          const {access_token, refresh_token} = getTokenApi();
+
+          registerRaceApi(access_token, body, utmbRaceId);
         } else if (numFee === 1) {
           if (parseFloat(feePrice) === parseFloat(salePrice)) {
             //INSERT O AVISO A API DE UMTB EL REGISTRO DE UNA CARRERA
-            var tokenApi = getTokenApi();
-            registerRaceApi(tokenApi, body, utmbRaceId);
+            
+            const {access_token, refresh_token} = getTokenApi();
+            registerRaceApi(access_token, body, utmbRaceId);
           }
         }
       }
