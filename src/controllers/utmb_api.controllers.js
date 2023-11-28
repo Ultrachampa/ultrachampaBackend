@@ -70,8 +70,12 @@ export const getTokenApi = async (req, res) => {
   })
     .then((res) => (respuesta = res.text()))
     .then((response) => {
-      return response;
+      const data = response;
+      console.log("data", data);
+      res.send(data);
     });
+
+  return respuesta;
 };
 
 export const registerRaceApi = async (token, body, raceID) => {
