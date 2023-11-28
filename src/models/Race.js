@@ -23,7 +23,11 @@ const RaceSchema = new mongoose.Schema({
     available: {
       type: Boolean,
       default: false,
-    }
+    },
+  },
+  utmbRaceId: {
+    type: String,
+    required: false,
   },
 });
 

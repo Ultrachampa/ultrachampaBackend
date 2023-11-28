@@ -3,6 +3,10 @@ import Race from "../models/Race";
 import RegisterData from "../models/RegisterData";
 import DiscountCode from "../models/DiscountCodes";
 import Fee from "../models/Fee";
+import Sale from "../models/Sale";
+import Users from "../models/Users";
+
+import { getTokenApi, registerRaceApi } from "./utmb_api.controllers";
 mercadopago.configure({
   access_token: process.env.ACCESS_TOKEN,
 });
@@ -152,35 +156,88 @@ export const payFee = async (req, res) => {
 
 //Función que se ejecuta después de realizar el pago del link generado anteriormente, recibe el body enviado por el script de MP y el ID de la cuota.
 export const receiveWebhook = async (req, res) => {
+  const now = new Date();
   const payment = req.query;
   const feeID = req.params.feeID;
   //Obtengo toda la info de la cuota ingresada
   const feeInfo = await Fee.find({ _id: feeID }).exec();
   const feeSaleID = feeInfo[0].sale;
   const numFee = feeInfo[0].numFee;
+  const feePrice = feeInfo[0].feePrice;
+  //INFO VENTAS
+  const saleInfo = await Sale.find({ _id: feeSaleID }).exec();
+  const salePrice = saleInfo[0].price;
+  const userIdSale = saleInfo[0].user;
+  const raceIdSale = saleInfo[0].race;
+
+  //INFO RACES
+  const raceInfo = await Race.find({ _id: raceIdSale }).exec();
+  const utmbRaceId = raceInfo[0].utmbRaceId;
+
+  //USER INFO
+  const userInfo = await Users.find({ _id: userIdSale }).exec();
+  const userFirstname = userInfo[0].name;
+  const userLastname = userInfo[0].lastname;
+  const userBirthdate = userInfo[0].birthdate;
+  const userEmail = userInfo[0].email;
+  const userNationality = userInfo[0].nationality;
+  const userGender = userInfo[0].gender;
+  const userTeam = userInfo[0].team;
+
+  var body = {
+    firstName: userFirstname,
+    lastName: userLastname,
+    birthdate: userBirthdate,
+    gender: userGender,
+    email: userEmail,
+    nationality: userNationality,
+    registrationFee: 0,
+    totalPaid: salePrice,
+    currency: "ARS",
+    urlDashboard: "",
+    registrationDate: now,
+    status: "REGISTERED", // CANCELLED
+    fileNumber: feeSaleID,
+    grp: userTeam,
+  };
+
   try {
     //Si el pago fue correcto
     if (payment.type === "payment") {
       const data = await mercadopago.payment.findById(payment["data.id"]);
       //Establezco los filtros y los parámetros a actualizar
       //Cambio los valores de la cuota ingresada: isActive -> false (deshabilita el boton pagar), isPayed -> true (fue pagada.)
-      if(data.body.status === "approved"){
-        const filterActual = { _id: feeID, sale: feeSaleID };
-        const updateActual = { isActive: false, isPayed: true };
-        const actualFee = await Fee.findOneAndUpdate(filterActual, updateActual);
-        //await actualFee.save();
-        //Cambio los valores de la cuota siguiente: isActive -> true (habilita el boton pagar), isPayed -> false (no fue pagada.)
-
-        const filterNext = { sale: feeSaleID, numFee: numFee + 1 };
-        const updateNext = { isActive: true, isPayed: false };
-        const nextFee = await Fee.findOneAndUpdate(filterNext, updateNext);
-        //await nextFee.save();
-        //Devuelvo las respuestas
-        
-        return res.sendStatus(200);
-      } else {
-        return res.sendStatus(400).json({error: "El pago no ha sido aprobado."})
+      if (data.body.status === "approved") {
+        if (numFee === 3) {
+          //INSERT O AVISO A API DE UMTB EL REGISTRO DE UNA CARRERA
+          var tokenApi = getTokenApi();
+          registerRaceApi(tokenApi, body, utmbRaceId);
+        } else if (numFee === 1) {
+          if (parseFloat(feePrice) === parseFloat(salePrice)) {
+            //INSERT O AVISO A API DE UMTB EL REGISTRO DE UNA CARRERA
+            var tokenApi = getTokenApi();
+            registerRaceApi(tokenApi, body, utmbRaceId);
+          }
+        }
       }
+
+      // const filterActual = { _id: feeID, sale: feeSaleID };
+      // const updateActual = { isActive: false, isPayed: true };
+      // const actualFee = await Fee.findOneAndUpdate(filterActual, updateActual);
+      // //await actualFee.save();
+      // //Cambio los valores de la cuota siguiente: isActive -> true (habilita el boton pagar), isPayed -> false (no fue pagada.)
+
+      // const filterNext = { sale: feeSaleID, numFee: numFee + 1 };
+      // const updateNext = { isActive: true, isPayed: false };
+      // const nextFee = await Fee.findOneAndUpdate(filterNext, updateNext);
+      // //await nextFee.save();
+      // //Devuelvo las respuestas
+
+      return res.sendStatus(200);
+    } else {
+      return res
+        .sendStatus(400)
+        .json({ error: "El pago no ha sido aprobado." });
     }
   } catch (error) {
     console.log(error);
