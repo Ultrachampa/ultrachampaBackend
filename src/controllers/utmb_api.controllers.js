@@ -1,6 +1,8 @@
 import Fee from "../models/Fee";
 import Sale from "../models/Sale";
 import Race from "../models/Race";
+import Users from "../models/Users";
+import fetch from "node-fetch";
 
 export const memberSimple = async (req, res) => {
   const { authToken } = req.body;
@@ -76,11 +78,10 @@ export const getTokenApi = async (req, res) => {
     },
     body: datosCodificados,
   })
-    .then((res) => (respuesta = res.text()))
+    .then((res) => (respuesta = res.json()))
     .then((response) => {
       const data = response;
-      console.log("data", data);
-      res.send(data);
+      return data;
     });
 
   return respuesta;
@@ -106,60 +107,59 @@ export const registerRaceApi = async (token, body, raceID) => {
   return respuesta;
 };
 
-export const Testeo = async (req, res) => {
-  const now = new Date();
-  const feeID = "64c5c743286051dfe9612067";
-  //Obtengo toda la info de la cuota ingresada
-  const feeInfo = await Fee.findById({ _id: feeID }).exec();
+// export const Testeo = async (req, res) => {
+//   const now = new Date();
+//   const feeID = "64bc574dba8edd1300a219c7";
+//   //Obtengo toda la info de la cuota ingresada
+//   const feeInfo = await Fee.findById(feeID).exec();
+//   const feeSaleID = feeInfo.sale;
 
-  // const feeSaleID = feeInfo[0].sale;
+//   //INFO VENTAS
+//   const saleInfo = await Sale.findById(feeSaleID).exec();
+//   const salePrice = saleInfo.price;
+//   const userIdSale = saleInfo.user;
+//   const raceIdSale = saleInfo.race;
 
-  // //INFO VENTAS
-  // const saleInfo = await Sale.find({ "_id": feeSaleID }).exec();
-  // const salePrice = saleInfo[0].price;
-  // const userIdSale = saleInfo[0].user;
-  // const raceIdSale = saleInfo[0].race;
+//   //INFO RACES
+//   const raceInfo = await Race.findById(raceIdSale).exec();
+//   // const utmbRaceId = raceInfo[0].utmbRaceId;
 
-  // //INFO RACES
-  // const raceInfo = await Race.find({ "_id": raceIdSale }).exec();
-  // // const utmbRaceId = raceInfo[0].utmbRaceId;
+//   //USER INFO
+//   const userInfo = await Users.findById(userIdSale).exec();
+//   const userFirstname = userInfo.name;
+//   const userLastname = userInfo.lastname;
+//   const userBirthdate = userInfo.birthdate;
+//   const userEmail = userInfo.email;
+//   const userNationality = userInfo.nationality;
+//   const userGender = userInfo.gender;
+//   const userTeam = userInfo.team;
 
-  // //USER INFO
-  // const userInfo = await Users.find({ "_id": userIdSale }).exec();
-  // const userFirstname = userInfo[0].name;
-  // const userLastname = userInfo[0].lastname;
-  // const userBirthdate = userInfo[0].birthdate;
-  // const userEmail = userInfo[0].email;
-  // const userNationality = userInfo[0].nationality;
-  // const userGender = userInfo[0].gender;
-  // const userTeam = userInfo[0].team;
+//   var body = {
+//     firstName: userFirstname,
+//     lastName: userLastname,
+//     birthdate: userBirthdate,
+//     gender: userGender,
+//     email: userEmail,
+//     nationality: userNationality,
+//     registrationFee: 0,
+//     totalPaid: salePrice,
+//     currency: "ARS",
+//     urlDashboard: "",
+//     registrationDate: now,
+//     status: "CANCELLED", // CANCELLED
+//     fileNumber: feeSaleID,
+//     grp: userTeam,
+//   };
 
-  // var body = {
-  //   firstName: userFirstname,
-  //   lastName: userLastname,
-  //   birthdate: userBirthdate,
-  //   gender: userGender,
-  //   email: userEmail,
-  //   nationality: userNationality,
-  //   registrationFee: 0,
-  //   totalPaid: salePrice,
-  //   currency: "ARS",
-  //   urlDashboard: "",
-  //   registrationDate: now,
-  //   status: "CANCELLED", // CANCELLED
-  //   fileNumber: feeSaleID,
-  //   grp: userTeam,
-  // };
+//   var tokenApi = await getTokenApi();
+//   const access_token = tokenApi.access_token
+//   const refresh_token = tokenApi.refresh_token
+ 
 
-  // const { access_token, refresh_token } = getTokenApi();
+//   return res.send({
+//     body: body,
+//     access_token: access_token,
+//   });
 
-  return res.send({
-    // access_token: access_token,
-    // body: body,
-    // raceInfo: raceInfo,
-    // saleInfo: saleInfo,
-    // userInfo: userInfo,
-    feeInfo: feeInfo,
-  });
-  // registerRaceApi(access_token, body, utmbRaceId);
-};
+//   // registerRaceApi(access_token, body, utmbRaceId);
+// };

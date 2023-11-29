@@ -5,6 +5,7 @@ import DiscountCode from "../models/DiscountCodes";
 import Fee from "../models/Fee";
 import Sale from "../models/Sale";
 import Users from "../models/Users";
+import fetch from "node-fetch";
 
 import { getTokenApi, registerRaceApi } from "./utmb_api.controllers";
 mercadopago.configure({
@@ -160,29 +161,29 @@ export const receiveWebhook = async (req, res) => {
   const payment = req.query;
   const feeID = req.params.feeID;
   //Obtengo toda la info de la cuota ingresada
-  const feeInfo = await Fee.find({ _id: feeID }).exec();
-  const feeSaleID = feeInfo[0].sale;
-  const numFee = feeInfo[0].numFee;
-  const feePrice = feeInfo[0].feePrice;
+  const feeInfo = await Fee.findById(feeID).exec();
+  const feeSaleID = feeInfo.sale;
+  const numFee = feeInfo.numFee;
+  const feePrice = feeInfo.feePrice;
   //INFO VENTAS
-  const saleInfo = await Sale.find({ _id: feeSaleID }).exec();
-  const salePrice = saleInfo[0].price;
-  const userIdSale = saleInfo[0].user;
-  const raceIdSale = saleInfo[0].race;
+  const saleInfo = await Sale.findById(feeSaleID).exec();
+  const salePrice = saleInfo.price;
+  const userIdSale = saleInfo.user;
+  const raceIdSale = saleInfo.race;
 
   //INFO RACES
-  const raceInfo = await Race.find({ _id: raceIdSale }).exec();
-  const utmbRaceId = raceInfo[0].utmbRaceId;
+  const raceInfo = await Race.findById(raceIdSale).exec();
+  const utmbRaceId = raceInfo.utmbRaceId;
 
   //USER INFO
-  const userInfo = await Users.find({ _id: userIdSale }).exec();
-  const userFirstname = userInfo[0].name;
-  const userLastname = userInfo[0].lastname;
-  const userBirthdate = userInfo[0].birthdate;
-  const userEmail = userInfo[0].email;
-  const userNationality = userInfo[0].nationality;
-  const userGender = userInfo[0].gender;
-  const userTeam = userInfo[0].team;
+  const userInfo = await Users.findById(userIdSale).exec();
+  const userFirstname = userInfo.name;
+  const userLastname = userInfo.lastname;
+  const userBirthdate = userInfo.birthdate;
+  const userEmail = userInfo.email;
+  const userNationality = userInfo.nationality;
+  const userGender = userInfo.gender;
+  const userTeam = userInfo.team;
 
   var body = {
     firstName: userFirstname,
@@ -209,15 +210,22 @@ export const receiveWebhook = async (req, res) => {
       //Cambio los valores de la cuota ingresada: isActive -> false (deshabilita el boton pagar), isPayed -> true (fue pagada.)
       if (data.body.status === "approved") {
         if (numFee === 3) {
+          
           //INSERT O AVISO A API DE UMTB EL REGISTRO DE UNA CARRERA
-          const {access_token, refresh_token} = getTokenApi();
+
+          var tokenApi = await getTokenApi();
+          const access_token = tokenApi.access_token
+          const refresh_token = tokenApi.refresh_token
 
           registerRaceApi(access_token, body, utmbRaceId);
         } else if (numFee === 1) {
           if (parseFloat(feePrice) === parseFloat(salePrice)) {
             //INSERT O AVISO A API DE UMTB EL REGISTRO DE UNA CARRERA
             
-            const {access_token, refresh_token} = getTokenApi();
+            var tokenApi = await getTokenApi();
+            const access_token = tokenApi.access_token
+            const refresh_token = tokenApi.refresh_token
+
             registerRaceApi(access_token, body, utmbRaceId);
           }
         }
