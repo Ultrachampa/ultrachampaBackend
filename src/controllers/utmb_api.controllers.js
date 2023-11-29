@@ -106,7 +106,7 @@ export const registerRaceApi = async (token, body, raceID) => {
   return respuesta;
 };
 
-export const testing = async (req, res) => {
+export const Testeo = async (req, res) => {
   const now = new Date();
   const feeID = "64c5c743286051dfe9612067";
   //Obtengo toda la info de la cuota ingresada
@@ -152,7 +152,7 @@ export const testing = async (req, res) => {
 
   const { access_token, refresh_token } = getTokenApi();
 
-  res.send({
+  return res.send({
     access_token: access_token,
     body: body,
   });
