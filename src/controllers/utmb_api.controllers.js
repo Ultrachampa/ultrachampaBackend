@@ -110,54 +110,56 @@ export const Testeo = async (req, res) => {
   const now = new Date();
   const feeID = "64c5c743286051dfe9612067";
   //Obtengo toda la info de la cuota ingresada
-  const feeInfo = await Fee.findById({ "_id": feeID }).exec();
-  const feeSaleID = feeInfo[0].sale;
+  const feeInfo = await Fee.findById({ _id: feeID }).exec();
 
-  //INFO VENTAS
-  const saleInfo = await Sale.find({ "_id": feeSaleID }).exec();
-  const salePrice = saleInfo[0].price;
-  const userIdSale = saleInfo[0].user;
-  const raceIdSale = saleInfo[0].race;
+  // const feeSaleID = feeInfo[0].sale;
 
-  //INFO RACES
-  const raceInfo = await Race.find({ "_id": raceIdSale }).exec();
-  // const utmbRaceId = raceInfo[0].utmbRaceId;  
+  // //INFO VENTAS
+  // const saleInfo = await Sale.find({ "_id": feeSaleID }).exec();
+  // const salePrice = saleInfo[0].price;
+  // const userIdSale = saleInfo[0].user;
+  // const raceIdSale = saleInfo[0].race;
 
-  //USER INFO
-  const userInfo = await Users.find({ "_id": userIdSale }).exec();
-  const userFirstname = userInfo[0].name;
-  const userLastname = userInfo[0].lastname;
-  const userBirthdate = userInfo[0].birthdate;
-  const userEmail = userInfo[0].email;
-  const userNationality = userInfo[0].nationality;
-  const userGender = userInfo[0].gender;
-  const userTeam = userInfo[0].team;
+  // //INFO RACES
+  // const raceInfo = await Race.find({ "_id": raceIdSale }).exec();
+  // // const utmbRaceId = raceInfo[0].utmbRaceId;
 
-  var body = {
-    firstName: userFirstname,
-    lastName: userLastname,
-    birthdate: userBirthdate,
-    gender: userGender,
-    email: userEmail,
-    nationality: userNationality,
-    registrationFee: 0,
-    totalPaid: salePrice,
-    currency: "ARS",
-    urlDashboard: "",
-    registrationDate: now,
-    status: "CANCELLED", // CANCELLED
-    fileNumber: feeSaleID,
-    grp: userTeam,
-  };
+  // //USER INFO
+  // const userInfo = await Users.find({ "_id": userIdSale }).exec();
+  // const userFirstname = userInfo[0].name;
+  // const userLastname = userInfo[0].lastname;
+  // const userBirthdate = userInfo[0].birthdate;
+  // const userEmail = userInfo[0].email;
+  // const userNationality = userInfo[0].nationality;
+  // const userGender = userInfo[0].gender;
+  // const userTeam = userInfo[0].team;
 
-  const { access_token, refresh_token } = getTokenApi();
+  // var body = {
+  //   firstName: userFirstname,
+  //   lastName: userLastname,
+  //   birthdate: userBirthdate,
+  //   gender: userGender,
+  //   email: userEmail,
+  //   nationality: userNationality,
+  //   registrationFee: 0,
+  //   totalPaid: salePrice,
+  //   currency: "ARS",
+  //   urlDashboard: "",
+  //   registrationDate: now,
+  //   status: "CANCELLED", // CANCELLED
+  //   fileNumber: feeSaleID,
+  //   grp: userTeam,
+  // };
+
+  // const { access_token, refresh_token } = getTokenApi();
 
   return res.send({
-    access_token: access_token,
-    body: body,
-    raceInfo: raceInfo,
-    saleInfo: saleInfo,
-    userInfo: userInfo
+    // access_token: access_token,
+    // body: body,
+    // raceInfo: raceInfo,
+    // saleInfo: saleInfo,
+    // userInfo: userInfo,
+    feeInfo: feeInfo,
   });
   // registerRaceApi(access_token, body, utmbRaceId);
 };
