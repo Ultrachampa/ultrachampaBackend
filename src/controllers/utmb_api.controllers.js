@@ -110,21 +110,21 @@ export const Testeo = async (req, res) => {
   const now = new Date();
   const feeID = "64c5c743286051dfe9612067";
   //Obtengo toda la info de la cuota ingresada
-  const feeInfo = await Fee.find({ _id: feeID }).exec();
+  const feeInfo = await Fee.findById({ "_id": feeID }).exec();
   const feeSaleID = feeInfo[0].sale;
 
   //INFO VENTAS
-  const saleInfo = await Sale.find({ _id: feeSaleID }).exec();
+  const saleInfo = await Sale.find({ "_id": feeSaleID }).exec();
   const salePrice = saleInfo[0].price;
   const userIdSale = saleInfo[0].user;
   const raceIdSale = saleInfo[0].race;
 
   //INFO RACES
-  const raceInfo = await Race.find({ _id: raceIdSale }).exec();
-  const utmbRaceId = raceInfo[0].utmbRaceId;
+  const raceInfo = await Race.find({ "_id": raceIdSale }).exec();
+  // const utmbRaceId = raceInfo[0].utmbRaceId;  
 
   //USER INFO
-  const userInfo = await Users.find({ _id: userIdSale }).exec();
+  const userInfo = await Users.find({ "_id": userIdSale }).exec();
   const userFirstname = userInfo[0].name;
   const userLastname = userInfo[0].lastname;
   const userBirthdate = userInfo[0].birthdate;
@@ -155,6 +155,9 @@ export const Testeo = async (req, res) => {
   return res.send({
     access_token: access_token,
     body: body,
+    raceInfo: raceInfo,
+    saleInfo: saleInfo,
+    userInfo: userInfo
   });
   // registerRaceApi(access_token, body, utmbRaceId);
 };
