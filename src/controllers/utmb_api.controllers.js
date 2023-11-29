@@ -55,7 +55,6 @@ export const checkActiveStatus = async (req, res) => {
 };
 
 export const getTokenApi = async (req, res) => {
-
   var respuesta = "";
   const querystring = require("querystring");
 
@@ -107,7 +106,7 @@ export const registerRaceApi = async (token, body, raceID) => {
   return respuesta;
 };
 
-export const testing = async () => {
+export const testing = async (req, res) => {
   const now = new Date();
   const feeID = "64c5c743286051dfe9612067";
   //Obtengo toda la info de la cuota ingresada
@@ -151,7 +150,11 @@ export const testing = async () => {
     grp: userTeam,
   };
 
-  const {access_token, refresh_token} = getTokenApi();
-  registerRaceApi(access_token, body, utmbRaceId);
+  const { access_token, refresh_token } = getTokenApi();
 
+  res.send({
+    access_token: access_token,
+    body: body,
+  });
+  // registerRaceApi(access_token, body, utmbRaceId);
 };
