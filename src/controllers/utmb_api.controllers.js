@@ -1,3 +1,7 @@
+import Fee from "../models/Fee";
+import Sale from "../models/Sale";
+import Race from "../models/Race";
+
 export const memberSimple = async (req, res) => {
   const { authToken } = req.body;
   var respuesta = "";
@@ -51,6 +55,7 @@ export const checkActiveStatus = async (req, res) => {
 };
 
 export const getTokenApi = async (req, res) => {
+
   var respuesta = "";
   const querystring = require("querystring");
 
@@ -100,4 +105,53 @@ export const registerRaceApi = async (token, body, raceID) => {
     });
 
   return respuesta;
+};
+
+export const testing = async () => {
+  const now = new Date();
+  const feeID = "64c5c743286051dfe9612067";
+  //Obtengo toda la info de la cuota ingresada
+  const feeInfo = await Fee.find({ _id: feeID }).exec();
+  const feeSaleID = feeInfo[0].sale;
+
+  //INFO VENTAS
+  const saleInfo = await Sale.find({ _id: feeSaleID }).exec();
+  const salePrice = saleInfo[0].price;
+  const userIdSale = saleInfo[0].user;
+  const raceIdSale = saleInfo[0].race;
+
+  //INFO RACES
+  const raceInfo = await Race.find({ _id: raceIdSale }).exec();
+  const utmbRaceId = raceInfo[0].utmbRaceId;
+
+  //USER INFO
+  const userInfo = await Users.find({ _id: userIdSale }).exec();
+  const userFirstname = userInfo[0].name;
+  const userLastname = userInfo[0].lastname;
+  const userBirthdate = userInfo[0].birthdate;
+  const userEmail = userInfo[0].email;
+  const userNationality = userInfo[0].nationality;
+  const userGender = userInfo[0].gender;
+  const userTeam = userInfo[0].team;
+
+  var body = {
+    firstName: userFirstname,
+    lastName: userLastname,
+    birthdate: userBirthdate,
+    gender: userGender,
+    email: userEmail,
+    nationality: userNationality,
+    registrationFee: 0,
+    totalPaid: salePrice,
+    currency: "ARS",
+    urlDashboard: "",
+    registrationDate: now,
+    status: "CANCELLED", // CANCELLED
+    fileNumber: feeSaleID,
+    grp: userTeam,
+  };
+
+  const {access_token, refresh_token} = getTokenApi();
+  registerRaceApi(access_token, body, utmbRaceId);
+
 };
