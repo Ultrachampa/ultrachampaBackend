@@ -88,10 +88,11 @@ export const getTokenApi = async (req, res) => {
 };
 
 export const registerRaceApi = async (token, body, raceID) => {
+
   const url = `https://api.utmb.world/registration/single/${raceID} `;
 
   await fetch(url, {
-    method: "GET",
+    method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,
       body: JSON.stringify(body),
@@ -107,59 +108,55 @@ export const registerRaceApi = async (token, body, raceID) => {
   return respuesta;
 };
 
-// export const Testeo = async (req, res) => {
-//   const now = new Date();
-//   const feeID = "64bc574dba8edd1300a219c7";
-//   //Obtengo toda la info de la cuota ingresada
-//   const feeInfo = await Fee.findById(feeID).exec();
-//   const feeSaleID = feeInfo.sale;
+export const Testeo = async (req, res) => {
+  const { feeID, status } = req.body;
+  const now = new Date();
+  // const feeID = "64bc574dba8edd1300a219c7";
 
-//   //INFO VENTAS
-//   const saleInfo = await Sale.findById(feeSaleID).exec();
-//   const salePrice = saleInfo.price;
-//   const userIdSale = saleInfo.user;
-//   const raceIdSale = saleInfo.race;
 
-//   //INFO RACES
-//   const raceInfo = await Race.findById(raceIdSale).exec();
-//   // const utmbRaceId = raceInfo[0].utmbRaceId;
+  //Obtengo toda la info de la cuota ingresada
+  const feeInfo = await Fee.findById(feeID).exec();
+  const feeSaleID = feeInfo.sale;
 
-//   //USER INFO
-//   const userInfo = await Users.findById(userIdSale).exec();
-//   const userFirstname = userInfo.name;
-//   const userLastname = userInfo.lastname;
-//   const userBirthdate = userInfo.birthdate;
-//   const userEmail = userInfo.email;
-//   const userNationality = userInfo.nationality;
-//   const userGender = userInfo.gender;
-//   const userTeam = userInfo.team;
+  //INFO VENTAS
+  const saleInfo = await Sale.findById(feeSaleID).exec();
+  const salePrice = saleInfo.price;
+  const userIdSale = saleInfo.user;
+  const raceIdSale = saleInfo.race;
 
-//   var body = {
-//     firstName: userFirstname,
-//     lastName: userLastname,
-//     birthdate: userBirthdate,
-//     gender: userGender,
-//     email: userEmail,
-//     nationality: userNationality,
-//     registrationFee: 0,
-//     totalPaid: salePrice,
-//     currency: "ARS",
-//     urlDashboard: "",
-//     registrationDate: now,
-//     status: "CANCELLED", // CANCELLED
-//     fileNumber: feeSaleID,
-//     grp: userTeam,
-//   };
+  //INFO RACES
+  const raceInfo = await Race.findById(raceIdSale).exec();
+  // const utmbRaceId = raceInfo[0].utmbRaceId;
 
-//   var tokenApi = await getTokenApi();
-//   const access_token = tokenApi.access_token
-//   const refresh_token = tokenApi.refresh_token
- 
+  //USER INFO
+  const userInfo = await Users.findById(userIdSale).exec();
+  const userFirstname = userInfo.name;
+  const userLastname = userInfo.lastname;
+  const userBirthdate = userInfo.birthdate;
+  const userEmail = userInfo.email;
+  const userNationality = userInfo.nationality;
+  const userGender = userInfo.gender;
+  const userTeam = userInfo.team;
 
-//   return res.send({
-//     body: body,
-//     access_token: access_token,
-//   });
+  var body = {
+    firstName: userFirstname,
+    lastName: userLastname,
+    birthdate: userBirthdate,
+    gender: userGender,
+    email: userEmail,
+    nationality: userNationality,
+    registrationFee: 0,
+    totalPaid: salePrice,
+    currency: "ARS",
+    urlDashboard: "",
+    registrationDate: now,
+    status: status, // CANCELLED
+    fileNumber: feeSaleID,
+    grp: userTeam,
+  };
 
-//   // registerRaceApi(access_token, body, utmbRaceId);
-// };
+  var tokenApi = await getTokenApi();
+  const access_token = tokenApi.access_token;
+  const refresh_token = tokenApi.refresh_token;
+  registerRaceApi(access_token, body, utmbRaceId);
+};
