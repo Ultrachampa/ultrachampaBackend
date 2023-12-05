@@ -56,7 +56,7 @@ export const checkActiveStatus = async (req, res) => {
   return respuesta;
 };
 
-export const getTokenApi = async () => {
+export const getTokenApi = async (req, res) => {
   var respuesta = "";
   const querystring = require("querystring");
 
@@ -79,11 +79,12 @@ export const getTokenApi = async () => {
     body: datosCodificados,
   }).then((res) => (respuesta = res.json()));
 
+  res.sendStatus(200);
   return respuesta;
 };
 
 export const registerRaceApi = async (token, body, raceID) => {
-  var respuesta = ""
+  var respuesta = "";
   const url = `https://api.utmb.world/registration/single/${raceID} `;
 
   await fetch(url, {
@@ -92,15 +93,16 @@ export const registerRaceApi = async (token, body, raceID) => {
       Authorization: `Bearer ${token}`,
       body: JSON.stringify(body),
     },
-  })
-    .then((res) => (respuesta = res.json()))
+  }).then((res) => (respuesta = res.json()));
+
+  res.sendStatus(200);
   return respuesta;
 };
 
 export const Testeo = async (req, res) => {
   const { feeID, status } = req.body;
   const now = new Date();
-  var respuesta = ""
+  var respuesta = "";
   // const feeID = "64bc574dba8edd1300a219c7";
 
   //Obtengo toda la info de la cuota ingresada
@@ -149,5 +151,5 @@ export const Testeo = async (req, res) => {
   const refresh_token = tokenApi.refresh_token;
   respuesta = await registerRaceApi(access_token, body, utmbRaceId);
 
-  return respuesta
+  return respuesta;
 };
