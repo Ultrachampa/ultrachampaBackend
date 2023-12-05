@@ -113,7 +113,7 @@ export const Testeo = async (req, res) => {
 
   //INFO RACES
   const raceInfo = await Race.findById(raceIdSale).exec();
-  // const utmbRaceId = raceInfo[0].utmbRaceId;
+  const utmbRaceId = raceInfo.utmbRaceId;
 
   //USER INFO
   const userInfo = await Users.findById(userIdSale).exec();
