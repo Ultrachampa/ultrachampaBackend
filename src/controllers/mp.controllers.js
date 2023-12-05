@@ -216,16 +216,20 @@ export const receiveWebhook = async (req, res) => {
           const access_token = tokenApi.access_token;
           const refresh_token = tokenApi.refresh_token;
 
-          registerRaceApi(access_token, body, utmbRaceId);
+          if (access_token !== "") {
+            registerRaceApi(access_token, body, utmbRaceId);
+          }
+
         } else if (numFee === 1) {
           if (parseFloat(feePrice) === parseFloat(salePrice)) {
             //INSERT O AVISO A API DE UMTB EL REGISTRO DE UNA CARRERA
-
             var tokenApi = await getTokenApi();
             const access_token = tokenApi.access_token;
             const refresh_token = tokenApi.refresh_token;
 
-            registerRaceApi(access_token, body, utmbRaceId);
+            if (access_token !== "") {
+              registerRaceApi(access_token, body, utmbRaceId);
+            }
           }
         }
 
@@ -235,6 +239,7 @@ export const receiveWebhook = async (req, res) => {
           filterActual,
           updateActual
         );
+
         await actualFee.save();
         //Cambio los valores de la cuota siguiente: isActive -> true (habilita el boton pagar), isPayed -> false (no fue pagada.)
         return res.sendStatus(200);
