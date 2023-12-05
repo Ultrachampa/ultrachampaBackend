@@ -217,7 +217,7 @@ export const receiveWebhook = async (req, res) => {
           const refresh_token = tokenApi.refresh_token;
 
           if (access_token !== "") {
-            registerRaceApi(access_token, body, utmbRaceId);
+            await registerRaceApi(access_token, body, utmbRaceId);
           }
 
         } else if (numFee === 1) {
@@ -228,7 +228,7 @@ export const receiveWebhook = async (req, res) => {
             const refresh_token = tokenApi.refresh_token;
 
             if (access_token !== "") {
-              registerRaceApi(access_token, body, utmbRaceId);
+              await registerRaceApi(access_token, body, utmbRaceId);
             }
           }
         }
