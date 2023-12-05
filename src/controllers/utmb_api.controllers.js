@@ -83,6 +83,7 @@ export const getTokenApi = async () => {
 };
 
 export const registerRaceApi = async (token, body, raceID) => {
+  var respuesta = ""
   const url = `https://api.utmb.world/registration/single/${raceID} `;
 
   await fetch(url, {
