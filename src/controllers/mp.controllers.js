@@ -206,6 +206,7 @@ export const receiveWebhook = async (req, res) => {
     //Si el pago fue correcto
     if (payment.type === "payment") {
       const data = await mercadopago.payment.findById(payment["data.id"]);
+      console.log(data);
       //Establezco los filtros y los parámetros a actualizar
       //Cambio los valores de la cuota ingresada: isActive -> false (deshabilita el boton pagar), isPayed -> true (fue pagada.)
       if (data.body.status === "approved") {
@@ -243,7 +244,8 @@ export const receiveWebhook = async (req, res) => {
 
         await actualFee.save();
         //Cambio los valores de la cuota siguiente: isActive -> true (habilita el boton pagar), isPayed -> false (no fue pagada.)
-        return res.sendStatus(200);
+        res.status(200).json({ message: "Operación exitosa." });
+
       }
     } else {
       return res
