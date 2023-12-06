@@ -63,7 +63,7 @@ export const getTokenApi = async () => {
   const datos = {
     username: "trailpunto@gmail.com",
     password: "Nolivera09!",
-    client_id: "valholl",
+    client_id: "utmb-world",
     grant_type: "password",
   };
 
@@ -94,9 +94,9 @@ export const registerRaceApi = async (token, body, raceID) => {
       Authorization: `Bearer ${token}`,
       body: JSON.stringify(body),
     },
-  }).then((res) => (respuesta = res.text()));
+  }).then((res) => (respuesta = res.json()));
 
-  console.log("registerRaceApi", respuesta);
+  console.log("registerRaceApi", (respuesta));
 
   return respuesta;
 };
@@ -149,9 +149,8 @@ export const Testeo = async (req, res) => {
     grp: userTeam,
   };
 
-  var tokenApi = await getTokenApi();
-  const access_token = tokenApi.access_token;
-  const refresh_token = tokenApi.refresh_token;
+  const {access_token} = await getTokenApi();
+
   respuesta = await registerRaceApi(access_token, body, utmbRaceId);
 
   console.log("Testing", respuesta);
