@@ -78,7 +78,9 @@ export const getTokenApi = async () => {
     },
     body: datosCodificados,
   }).then((res) => (respuesta = res.json()));
-  
+
+
+  console.log("getTokenApi",respuesta);
   return respuesta;
 };
 
@@ -152,6 +154,6 @@ export const Testeo = async (req, res) => {
   const refresh_token = tokenApi.refresh_token;
   respuesta = await registerRaceApi(access_token, body, utmbRaceId);
 
-  // console.log(respuesta);
+  console.log("Testing", respuesta);
   return respuesta;
 };
