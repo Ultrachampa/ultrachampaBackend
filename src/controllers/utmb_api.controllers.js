@@ -56,7 +56,7 @@ export const checkActiveStatus = async (req, res) => {
   return respuesta;
 };
 
-export const getTokenApi = async (req, res) => {
+export const getTokenApi = async () => {
   var respuesta = "";
   const querystring = require("querystring");
 
@@ -78,8 +78,7 @@ export const getTokenApi = async (req, res) => {
     },
     body: datosCodificados,
   }).then((res) => (respuesta = res.json()));
-
-  res.sendStatus(200);
+  
   return respuesta;
 };
 
@@ -93,9 +92,10 @@ export const registerRaceApi = async (token, body, raceID) => {
       Authorization: `Bearer ${token}`,
       body: JSON.stringify(body),
     },
-  }).then((res) => (respuesta = res.json()));
+  }).then((res) => (respuesta = res.text()));
 
-  res.sendStatus(200);
+  console.log("registerRaceApi", respuesta);
+
   return respuesta;
 };
 
@@ -117,7 +117,8 @@ export const Testeo = async (req, res) => {
 
   //INFO RACES
   const raceInfo = await Race.findById(raceIdSale).exec();
-  const utmbRaceId = raceInfo.utmbRaceId;
+  // const utmbRaceId = raceInfo.utmbRaceId;
+  const utmbRaceId = "95679";
 
   //USER INFO
   const userInfo = await Users.findById(userIdSale).exec();
@@ -151,5 +152,6 @@ export const Testeo = async (req, res) => {
   const refresh_token = tokenApi.refresh_token;
   respuesta = await registerRaceApi(access_token, body, utmbRaceId);
 
+  // console.log(respuesta);
   return respuesta;
 };

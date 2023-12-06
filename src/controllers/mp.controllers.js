@@ -209,29 +209,30 @@ export const receiveWebhook = async (req, res) => {
       //Establezco los filtros y los parámetros a actualizar
       //Cambio los valores de la cuota ingresada: isActive -> false (deshabilita el boton pagar), isPayed -> true (fue pagada.)
       if (data.body.status === "approved") {
-        if (numFee === 3) {
-          //INSERT O AVISO A API DE UMTB EL REGISTRO DE UNA CARRERA
+        
+        // if (numFee === 3) {
+        //   //INSERT O AVISO A API DE UMTB EL REGISTRO DE UNA CARRERA
 
-          var tokenApi = await getTokenApi();
-          const access_token = tokenApi.access_token;
-          const refresh_token = tokenApi.refresh_token;
+        //   var tokenApi = await getTokenApi();
+        //   const access_token = tokenApi.access_token;
+        //   const refresh_token = tokenApi.refresh_token;
 
-          if (access_token !== "") {
-            await registerRaceApi(access_token, body, utmbRaceId);
-          }
+        //   if (access_token !== "") {
+        //     await registerRaceApi(access_token, body, utmbRaceId);
+        //   }
 
-        } else if (numFee === 1) {
-          if (parseFloat(feePrice) === parseFloat(salePrice)) {
-            //INSERT O AVISO A API DE UMTB EL REGISTRO DE UNA CARRERA
-            var tokenApi = await getTokenApi();
-            const access_token = tokenApi.access_token;
-            const refresh_token = tokenApi.refresh_token;
+        // } else if (numFee === 1) {
+        //   if (parseFloat(feePrice) === parseFloat(salePrice)) {
+        //     //INSERT O AVISO A API DE UMTB EL REGISTRO DE UNA CARRERA
+        //     var tokenApi = await getTokenApi();
+        //     const access_token = tokenApi.access_token;
+        //     const refresh_token = tokenApi.refresh_token;
 
-            if (access_token !== "") {
-              await registerRaceApi(access_token, body, utmbRaceId);
-            }
-          }
-        }
+        //     if (access_token !== "") {
+        //       await registerRaceApi(access_token, body, utmbRaceId);
+        //     }
+        //   }
+        // }
 
         const filterActual = { _id: feeID, sale: feeSaleID };
         const updateActual = { isActive: false, isPayed: true };
