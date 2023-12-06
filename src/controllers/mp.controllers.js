@@ -70,7 +70,6 @@ export const payProduct = async (req, res) => {
 };
 
 //Generador de links de pago, recibe el ID de la cuota a pagar como parámetro
-
 export const payFee = async (req, res) => {
   let body = req.body;
   const { feeID } = body;
@@ -185,6 +184,8 @@ export const receiveWebhook = async (req, res) => {
   const userGender = userInfo.gender;
   const userTeam = userInfo.team;
 
+  let successResponseSent = false; //Booleano auxiliar que indica el status 200 y si ya fue enviado
+
   var body = {
     firstName: userFirstname,
     lastName: userLastname,
@@ -206,14 +207,12 @@ export const receiveWebhook = async (req, res) => {
     //Si el pago fue correcto
     if (payment.type === "payment") {
       const data = await mercadopago.payment.findById(payment["data.id"]);
-      console.log(data);
+
       //Establezco los filtros y los parámetros a actualizar
-      //Cambio los valores de la cuota ingresada: isActive -> false (deshabilita el boton pagar), isPayed -> true (fue pagada.)
       if (data.body.status === "approved") {
-        
+
         // if (numFee === 3) {
         //   //INSERT O AVISO A API DE UMTB EL REGISTRO DE UNA CARRERA
-
         //   var tokenApi = await getTokenApi();
         //   const access_token = tokenApi.access_token;
         //   const refresh_token = tokenApi.refresh_token;
@@ -235,22 +234,27 @@ export const receiveWebhook = async (req, res) => {
         //   }
         // }
 
+        
+        
+        //Establezco los filtros y los parámetros a actualizar
         const filterActual = { _id: feeID, sale: feeSaleID };
         const updateActual = { isActive: false, isPayed: true };
+        //Cambio los valores de la cuota ingresada: isActive -> false (deshabilita el boton pagar), isPayed -> true (fue pagada.)
         const actualFee = await Fee.findOneAndUpdate(
           filterActual,
           updateActual
         );
 
         await actualFee.save();
-        //Cambio los valores de la cuota siguiente: isActive -> true (habilita el boton pagar), isPayed -> false (no fue pagada.)
+        successResponseSent = true;
         res.status(200).json({ message: "Operación exitosa." });
-
       }
-    } else {
-      return res
-        .sendStatus(400)
-        .json({ error: "El pago no ha sido aprobado." });
+
+      if (!successResponseSent) {
+        return res
+          .sendStatus(400)
+          .json({ error: "El pago no ha sido aprobado." });
+      }
     }
   } catch (error) {
     console.log(error);
