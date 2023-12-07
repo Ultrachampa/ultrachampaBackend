@@ -19,7 +19,7 @@ export const memberSimple = async (req, res) => {
     .then((res) => (respuesta = res.text()))
     .then((response) => {
       const data = response;
-      console.log("data", data);
+      // console.log("data", data);
       res.send(data);
     });
 
@@ -49,7 +49,7 @@ export const checkActiveStatus = async (req, res) => {
     .then((res) => (respuesta = res.text()))
     .then((response) => {
       const data = response;
-      console.log("data", data);
+      // console.log("data", data);
       res.send(data);
     });
 
@@ -86,7 +86,7 @@ export const registerRaceApi = async (token, body, raceID) => {
   var respuesta = "";
   const url = `https://api.utmb.world/registration/single/${raceID} `;
 
-  console.log(body);
+  // console.log(body);
   await fetch(url, {
     method: "POST",
     headers: {
@@ -133,8 +133,7 @@ export const Testeo = async (req, res) => {
 
   //INFO RACES
   const raceInfo = await Race.findById(raceIdSale).exec();
-  // const utmbRaceId = raceInfo.utmbRaceId;
-  const utmbRaceId = "123456789";
+  const utmbRaceId = raceInfo.utmbRaceId;
 
   //USER INFO
   const userInfo = await Users.findById(userIdSale).exec();
@@ -168,10 +167,11 @@ export const Testeo = async (req, res) => {
     grp: userTeam,
   };
 
+  
   const { access_token } = await getTokenApi();
 
   respuesta = await registerRaceApi(access_token, body, utmbRaceId);
 
-  console.log("Testing", respuesta);
+  // console.log("Testing", respuesta);
   return respuesta;
 };

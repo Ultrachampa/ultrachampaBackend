@@ -159,11 +159,14 @@ export const receiveWebhook = async (req, res) => {
   const now = new Date();
   const payment = req.query;
   const feeID = req.params.feeID;
+
   //Obtengo toda la info de la cuota ingresada
+
   const feeInfo = await Fee.findById(feeID).exec();
   const feeSaleID = feeInfo.sale;
   const numFee = feeInfo.numFee;
   const feePrice = feeInfo.feePrice;
+
   //INFO VENTAS
   const saleInfo = await Sale.findById(feeSaleID).exec();
   const salePrice = saleInfo.price;
@@ -178,13 +181,16 @@ export const receiveWebhook = async (req, res) => {
   const userInfo = await Users.findById(userIdSale).exec();
   const userFirstname = userInfo.name;
   const userLastname = userInfo.lastname;
-  const userBirthdate = userInfo.birthdate;
+  const userBirthdate = formatDate(userInfo.birthdate);
   const userEmail = userInfo.email;
   const userNationality = userInfo.nationality;
-  const userGender = userInfo.gender;
+  const userGender =
+    userInfo.gender === "femenino"
+      ? "F"
+      : userInfo.gender === "masculino"
+      ? "M"
+      : "H";
   const userTeam = userInfo.team;
-
-  let successResponseSent = false; //Booleano auxiliar que indica el status 200 y si ya fue enviado
 
   var body = {
     firstName: userFirstname,
@@ -192,16 +198,18 @@ export const receiveWebhook = async (req, res) => {
     birthdate: userBirthdate,
     gender: userGender,
     email: userEmail,
-    nationality: userNationality,
+    nationality: userNationality.substring(0, 3),
     registrationFee: 0,
     totalPaid: salePrice,
     currency: "ARS",
     urlDashboard: "",
-    registrationDate: now,
+    registrationDate: now.toISOString(),
     status: "REGISTERED", // CANCELLED
-    fileNumber: feeSaleID,
+    fileNumber: feeID,
     grp: userTeam,
   };
+
+  let successResponseSent = false; //Booleano auxiliar que indica el status 200 y si ya fue enviado
 
   try {
     //Si el pago fue correcto
@@ -210,32 +218,24 @@ export const receiveWebhook = async (req, res) => {
 
       //Establezco los filtros y los parámetros a actualizar
       if (data.body.status === "approved") {
+        if (numFee === 3) {
+          //INSERT O AVISO A API DE UMTB EL REGISTRO DE UNA CARRERA
+          const { access_token } = await getTokenApi();
 
-        // if (numFee === 3) {
-        //   //INSERT O AVISO A API DE UMTB EL REGISTRO DE UNA CARRERA
-        //   var tokenApi = await getTokenApi();
-        //   const access_token = tokenApi.access_token;
-        //   const refresh_token = tokenApi.refresh_token;
+          if (access_token !== "") {
+            await registerRaceApi(access_token, body, utmbRaceId);
+          }
+        } else if (numFee === 1) {
+          if (parseFloat(feePrice) === parseFloat(salePrice)) {
+            //INSERT O AVISO A API DE UMTB EL REGISTRO DE UNA CARRERA
+            const { access_token } = await getTokenApi();
 
-        //   if (access_token !== "") {
-        //     await registerRaceApi(access_token, body, utmbRaceId);
-        //   }
+            if (access_token !== "") {
+              await registerRaceApi(access_token, body, utmbRaceId);
+            }
+          }
+        }
 
-        // } else if (numFee === 1) {
-        //   if (parseFloat(feePrice) === parseFloat(salePrice)) {
-        //     //INSERT O AVISO A API DE UMTB EL REGISTRO DE UNA CARRERA
-        //     var tokenApi = await getTokenApi();
-        //     const access_token = tokenApi.access_token;
-        //     const refresh_token = tokenApi.refresh_token;
-
-        //     if (access_token !== "") {
-        //       await registerRaceApi(access_token, body, utmbRaceId);
-        //     }
-        //   }
-        // }
-
-        
-        
         //Establezco los filtros y los parámetros a actualizar
         const filterActual = { _id: feeID, sale: feeSaleID };
         const updateActual = { isActive: false, isPayed: true };
@@ -261,3 +261,14 @@ export const receiveWebhook = async (req, res) => {
     return res.sendStatus(500).json({ error: error.message });
   }
 };
+
+function formatDate(fecha) {
+  // Verifica si la entrada es un objeto Date
+  if (!(fecha instanceof Date)) {
+    return "0000-00-00";
+  }
+  // Convierte la fecha a formato ISO (yyyy-mm-dd)
+  const fechaFormateada = fecha.toISOString().split('T')[0];
+
+  return fechaFormateada;
+}
