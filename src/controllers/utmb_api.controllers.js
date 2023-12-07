@@ -152,8 +152,8 @@ export const Testeo = async (req, res) => {
 
   const {access_token} = await getTokenApi();
 
-  respuesta = await registerRaceApi(access_token, body, utmbRaceId);
+  // respuesta = await registerRaceApi(access_token, body, utmbRaceId);
 
-  console.log("Testing", respuesta);
+  console.log("Testing", body);
   return respuesta;
 };
