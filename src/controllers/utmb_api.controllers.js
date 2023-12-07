@@ -172,6 +172,11 @@ export const Testeo = async (req, res) => {
 
   respuesta = await registerRaceApi(access_token, body, utmbRaceId);
 
-  console.log("Testing", respuesta);
-  return respuesta;
+
+  if(respuesta.status === "OK"){
+    return res.status(200).json({ message: "Operación exitosa." });
+  }else{
+    return res.status(500).json({ message: "Ha ocurrido un error en el proceso." });
+  }
+  
 };
