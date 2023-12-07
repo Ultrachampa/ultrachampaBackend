@@ -101,16 +101,15 @@ export const registerRaceApi = async (token, body, raceID) => {
 };
 
 function formatDate(fecha) {
-
   // Verifica si la entrada es un objeto Date
   if (!(fecha instanceof Date)) {
     return "0000-00-00";
   }
 
   // Ajusta la fecha para estar en la zona horaria local
-  
+
   // Convierte la fecha a formato ISO (yyyy-mm-dd)
-  const fechaFormateada = fecha.toISOString().split('T')[0];
+  const fechaFormateada = fecha.toISOString().split("T")[0];
 
   return fechaFormateada;
 }
@@ -167,16 +166,20 @@ export const Testeo = async (req, res) => {
     grp: userTeam,
   };
 
-  
   const { access_token } = await getTokenApi();
 
   respuesta = await registerRaceApi(access_token, body, utmbRaceId);
 
-
-  if(respuesta.status === "OK"){
-    return res.status(200).json({ message: "Operación exitosa." });
-  }else{
-    return res.status(500).json({ message: "Ha ocurrido un error en el proceso." });
+  if (respuesta.status === "OK") {
+    return res
+      .status(200)
+      .json({ message: "Operación exitosa.", respuesta: respuesta });
+  } else {
+    return res
+      .status(500)
+      .json({
+        message: "Ha ocurrido un error en el proceso.",
+        respuesta: respuesta,
+      });
   }
-  
 };
