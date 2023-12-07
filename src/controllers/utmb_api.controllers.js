@@ -172,6 +172,6 @@ export const Testeo = async (req, res) => {
 
   respuesta = await registerRaceApi(access_token, body, utmbRaceId);
 
-  // console.log("Testing", respuesta);
+  console.log("Testing", respuesta);
   return respuesta;
 };
