@@ -63,7 +63,7 @@ export const getTokenApi = async () => {
   const datos = {
     username: "trailpunto@gmail.com",
     password: "Nolivera09!",
-    client_id: "utmb-world",
+    client_id: "valholl",
     grant_type: "password",
   };
 
@@ -93,6 +93,7 @@ export const registerRaceApi = async (token, body, raceID) => {
     headers: {
       Authorization: `Bearer ${token}`,
       body: JSON.stringify(body),
+      "x-tenant-id" : "valholl"
     },
   }).then((res) => (respuesta = res.json()));
 
@@ -120,7 +121,7 @@ export const Testeo = async (req, res) => {
   //INFO RACES
   const raceInfo = await Race.findById(raceIdSale).exec();
   // const utmbRaceId = raceInfo.utmbRaceId;
-  const utmbRaceId = "95679";
+  const utmbRaceId = "123456789";
 
   //USER INFO
   const userInfo = await Users.findById(userIdSale).exec();
@@ -128,8 +129,8 @@ export const Testeo = async (req, res) => {
   const userLastname = userInfo.lastname;
   const userBirthdate = userInfo.birthdate;
   const userEmail = userInfo.email;
-  const userNationality = userInfo.nationality;
-  const userGender = userInfo.gender;
+  const userNationality = userInfo.nationality.substring(0, 3);
+  const userGender = userInfo.gender === "femenino" ? "F" :  userInfo.gender === "masculino" ? "M" : "H";
   const userTeam = userInfo.team;
 
   var body = {
@@ -143,7 +144,7 @@ export const Testeo = async (req, res) => {
     totalPaid: salePrice,
     currency: "ARS",
     urlDashboard: "",
-    registrationDate: now,
+    registrationDate: now.toISOString(),
     status: status, // CANCELLED
     fileNumber: feeSaleID,
     grp: userTeam,
