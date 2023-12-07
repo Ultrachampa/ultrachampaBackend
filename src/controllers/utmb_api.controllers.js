@@ -101,27 +101,16 @@ export const registerRaceApi = async (token, body, raceID) => {
 };
 
 function formatDate(fecha) {
+
   // Verifica si la entrada es un objeto Date
   if (!(fecha instanceof Date)) {
     return "0000-00-00";
   }
 
   // Ajusta la fecha para estar en la zona horaria local
-  const fechaAjustada = new Date(
-    fecha.getUTCFullYear(),
-    fecha.getUTCMonth(),
-    fecha.getUTCDate(),
-    0,
-    0,
-    0,
-    0
-  );
-
-  const año = fechaAjustada.getUTCFullYear();
-  const mes = ("0" + (fechaAjustada.getUTCMonth() + 1)).slice(-2);
-  const dia = ("0" + fechaAjustada.getUTCDate()).slice(-2);
-
-  const fechaFormateada = `${año}-${mes}-${dia}`;
+  
+  // Convierte la fecha a formato ISO (yyyy-mm-dd)
+  const fechaFormateada = fecha.toISOString().split('T')[0];
 
   return fechaFormateada;
 }
