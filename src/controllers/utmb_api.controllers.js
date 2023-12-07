@@ -91,7 +91,7 @@ export const registerRaceApi = async (token, body, raceID) => {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,
-      body: JSON.stringify(body),
+      body: JSON.parse(body),
       "x-tenant-id": "valholl",
     },
   }).then((res) => (respuesta = res.json()));
