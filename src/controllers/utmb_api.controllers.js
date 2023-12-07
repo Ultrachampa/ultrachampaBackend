@@ -79,7 +79,6 @@ export const getTokenApi = async () => {
     body: datosCodificados,
   }).then((res) => (respuesta = res.json()));
 
-  console.log("getTokenApi", respuesta);
   return respuesta;
 };
 
@@ -87,16 +86,16 @@ export const registerRaceApi = async (token, body, raceID) => {
   var respuesta = "";
   const url = `https://api.utmb.world/registration/single/${raceID} `;
 
+  console.log(body);
   await fetch(url, {
     method: "POST",
     headers: {
+      "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
-      body: JSON.parse(body),
       "x-tenant-id": "valholl",
     },
+    body: JSON.stringify(body),
   }).then((res) => (respuesta = res.json()));
-
-  console.log("registerRaceApi", respuesta);
 
   return respuesta;
 };
@@ -104,23 +103,28 @@ export const registerRaceApi = async (token, body, raceID) => {
 function formatDate(fecha) {
   // Verifica si la entrada es un objeto Date
   if (!(fecha instanceof Date)) {
-      return '0000-00-00';
+    return "0000-00-00";
   }
 
+  // Ajusta la fecha para estar en la zona horaria local
+  const fechaAjustada = new Date(
+    fecha.getUTCFullYear(),
+    fecha.getUTCMonth(),
+    fecha.getUTCDate(),
+    0,
+    0,
+    0,
+    0
+  );
 
-    // Ajusta la fecha para estar en la zona horaria local
-    const fechaAjustada = new Date(fecha.getUTCFullYear(), fecha.getUTCMonth(), fecha.getUTCDate(), 0, 0, 0, 0);
+  const año = fechaAjustada.getUTCFullYear();
+  const mes = ("0" + (fechaAjustada.getUTCMonth() + 1)).slice(-2);
+  const dia = ("0" + fechaAjustada.getUTCDate()).slice(-2);
 
-    const año = fechaAjustada.getUTCFullYear();
-    const mes = ('0' + (fechaAjustada.getUTCMonth() + 1)).slice(-2);
-    const dia = ('0' + fechaAjustada.getUTCDate()).slice(-2); 
+  const fechaFormateada = `${año}-${mes}-${dia}`;
 
-    const fechaFormateada = `${año}-${mes}-${dia}`;
-
-    return fechaFormateada;
+  return fechaFormateada;
 }
-
-
 
 export const Testeo = async (req, res) => {
   const { feeID, status } = req.body;
@@ -164,7 +168,7 @@ export const Testeo = async (req, res) => {
     birthdate: userBirthdate,
     gender: userGender,
     email: userEmail,
-    nationality: (userNationality).substring(0, 3),
+    nationality: userNationality.substring(0, 3),
     registrationFee: 0,
     totalPaid: salePrice,
     currency: "ARS",
@@ -175,7 +179,7 @@ export const Testeo = async (req, res) => {
     grp: userTeam,
   };
 
-  const {access_token} = await getTokenApi();
+  const { access_token } = await getTokenApi();
 
   respuesta = await registerRaceApi(access_token, body, utmbRaceId);
 
