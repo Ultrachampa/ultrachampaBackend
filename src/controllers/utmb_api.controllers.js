@@ -79,8 +79,7 @@ export const getTokenApi = async () => {
     body: datosCodificados,
   }).then((res) => (respuesta = res.json()));
 
-
-  console.log("getTokenApi",respuesta);
+  console.log("getTokenApi", respuesta);
   return respuesta;
 };
 
@@ -93,14 +92,35 @@ export const registerRaceApi = async (token, body, raceID) => {
     headers: {
       Authorization: `Bearer ${token}`,
       body: JSON.stringify(body),
-      "x-tenant-id" : "valholl"
+      "x-tenant-id": "valholl",
     },
   }).then((res) => (respuesta = res.json()));
 
-  console.log("registerRaceApi", (respuesta));
+  console.log("registerRaceApi", respuesta);
 
   return respuesta;
 };
+
+function formatDate(fecha) {
+  // Verifica si la entrada es un objeto Date
+  if (!(fecha instanceof Date)) {
+      return '0000-00-00';
+  }
+
+
+    // Ajusta la fecha para estar en la zona horaria local
+    const fechaAjustada = new Date(fecha.getUTCFullYear(), fecha.getUTCMonth(), fecha.getUTCDate(), 0, 0, 0, 0);
+
+    const año = fechaAjustada.getUTCFullYear();
+    const mes = ('0' + (fechaAjustada.getUTCMonth() + 1)).slice(-2);
+    const dia = ('0' + fechaAjustada.getUTCDate()).slice(-2); 
+
+    const fechaFormateada = `${año}-${mes}-${dia}`;
+
+    return fechaFormateada;
+}
+
+
 
 export const Testeo = async (req, res) => {
   const { feeID, status } = req.body;
@@ -127,10 +147,15 @@ export const Testeo = async (req, res) => {
   const userInfo = await Users.findById(userIdSale).exec();
   const userFirstname = userInfo.name;
   const userLastname = userInfo.lastname;
-  const userBirthdate = userInfo.birthdate;
+  const userBirthdate = formatDate(userInfo.birthdate);
   const userEmail = userInfo.email;
-  const userNationality = userInfo.nationality.substring(0, 3);
-  const userGender = userInfo.gender === "femenino" ? "F" :  userInfo.gender === "masculino" ? "M" : "H";
+  const userNationality = userInfo.nationality;
+  const userGender =
+    userInfo.gender === "femenino"
+      ? "F"
+      : userInfo.gender === "masculino"
+      ? "M"
+      : "H";
   const userTeam = userInfo.team;
 
   var body = {
@@ -139,21 +164,21 @@ export const Testeo = async (req, res) => {
     birthdate: userBirthdate,
     gender: userGender,
     email: userEmail,
-    nationality: userNationality,
+    nationality: (userNationality).substring(0, 3),
     registrationFee: 0,
     totalPaid: salePrice,
     currency: "ARS",
     urlDashboard: "",
     registrationDate: now.toISOString(),
     status: status, // CANCELLED
-    fileNumber: feeSaleID,
+    fileNumber: feeID,
     grp: userTeam,
   };
 
   const {access_token} = await getTokenApi();
 
-  // respuesta = await registerRaceApi(access_token, body, utmbRaceId);
+  respuesta = await registerRaceApi(access_token, body, utmbRaceId);
 
-  console.log("Testing", body);
+  console.log("Testing", respuesta);
   return respuesta;
 };
