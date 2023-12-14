@@ -106,10 +106,12 @@ function formatDate(fecha) {
     return "0000-00-00";
   }
 
-  // Ajusta la fecha para estar en la zona horaria local
+  const year = fecha.getFullYear();
+  const month = String(fecha.getMonth() + 1).padStart(2, '0');
+  const day = String(fecha.getDate()).padStart(2, '0');
 
-  // Convierte la fecha a formato ISO (yyyy-mm-dd)
-  const fechaFormateada = fecha.toISOString().split("T")[0];
+  // Formatea la fecha como "yyyy-mm-dd"
+  const fechaFormateada = `${year}-${month}-${day}`;
 
   return fechaFormateada;
 }
@@ -165,6 +167,7 @@ export const Testeo = async (req, res) => {
     fileNumber: feeID,
     grp: userTeam,
   };
+
 
   const { access_token } = await getTokenApi();
 
