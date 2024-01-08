@@ -26,6 +26,27 @@ export const memberSimple = async (req, res) => {
   return respuesta;
 };
 
+export const localMemberSimple  = async (authToken) => {
+  var respuesta = "";
+
+  const url = "https://api.utmb.world/users/dashboard/member/simple";
+
+  await fetch(url, {
+    method: "GET",
+    headers: {
+      Authorization: authToken,
+    },
+  })
+    .then((res) => (respuesta = res.text()))
+    .then((response) => {
+      const data = response;
+      // console.log("data", data);
+      res.send(data);
+    });
+
+  return respuesta;
+};
+
 export const checkActiveStatus = async (req, res) => {
   const { email, firstName, lastName, dob } = req.body;
   var respuesta = "";
@@ -111,7 +132,7 @@ function formatDate(fecha) {
   const day = String(fecha.getDate()).padStart(2, '0');
 
   // Formatea la fecha como "yyyy-mm-dd"
-  const fechaFormateada = `${year}-${month}-${day}`;
+  const fechaFormateada = `${year}-${month}-${parseInt(day) - 1}`;
 
   return fechaFormateada;
 }

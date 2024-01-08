@@ -7,7 +7,11 @@ import Sale from "../models/Sale";
 import Users from "../models/Users";
 import fetch from "node-fetch";
 
-import { getTokenApi, registerRaceApi } from "./utmb_api.controllers";
+import {
+  getTokenApi,
+  registerRaceApi,
+  localMemberSimple,
+} from "./utmb_api.controllers";
 mercadopago.configure({
   access_token: process.env.ACCESS_TOKEN,
 });
@@ -181,7 +185,6 @@ export const receiveWebhook = async (req, res) => {
   const userInfo = await Users.findById(userIdSale).exec();
   const userFirstname = userInfo.name;
   const userLastname = userInfo.lastname;
-  const userBirthdate = formatDate(userInfo.birthdate);
   const userEmail = userInfo.email;
   const userNationality = userInfo.nationality;
   const userGender =
@@ -195,7 +198,6 @@ export const receiveWebhook = async (req, res) => {
   var body = {
     firstName: userFirstname,
     lastName: userLastname,
-    birthdate: userBirthdate,
     gender: userGender,
     email: userEmail,
     nationality: userNationality.substring(0, 3),
@@ -223,6 +225,10 @@ export const receiveWebhook = async (req, res) => {
           const { access_token } = await getTokenApi();
 
           if (access_token !== "") {
+            const { birthdateIso } = await localMemberSimple(access_token);
+
+            body.birthdate = birthdateIso;
+
             await registerRaceApi(access_token, body, utmbRaceId);
           }
         } else if (numFee === 1) {
@@ -231,6 +237,9 @@ export const receiveWebhook = async (req, res) => {
             const { access_token } = await getTokenApi();
 
             if (access_token !== "") {
+              const { birthdateIso } = await localMemberSimple(access_token);
+              body.birthdate = birthdateIso;
+
               await registerRaceApi(access_token, body, utmbRaceId);
             }
           }
@@ -268,7 +277,7 @@ function formatDate(fecha) {
     return "0000-00-00";
   }
   // Convierte la fecha a formato ISO (yyyy-mm-dd)
-  const fechaFormateada = fecha.toISOString().split('T')[0];
+  const fechaFormateada = fecha.toISOString().split("T")[0];
 
   return fechaFormateada;
 }
