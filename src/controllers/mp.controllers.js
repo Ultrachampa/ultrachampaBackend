@@ -251,7 +251,8 @@ export const receiveWebhook = async (req, res) => {
         //Cambio los valores de la cuota ingresada: isActive -> false (deshabilita el boton pagar), isPayed -> true (fue pagada.)
         const actualFee = await Fee.findOneAndUpdate(
           filterActual,
-          updateActual
+          updateActual,
+          { new: true }
         );
 
         await actualFee.save();
