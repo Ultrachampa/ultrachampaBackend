@@ -147,6 +147,8 @@ export const Testeo = async (req, res) => {
   const feeInfo = await Fee.findById(feeID).exec();
   const feeSaleID = feeInfo.sale;
 
+  console.log(feeInfo);
+
   //INFO VENTAS
   const saleInfo = await Sale.findById(feeSaleID).exec();
   const salePrice = saleInfo.price;

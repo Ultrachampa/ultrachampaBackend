@@ -246,16 +246,15 @@ export const receiveWebhook = async (req, res) => {
         }
 
         //Establezco los filtros y los parámetros a actualizar
-        const filterActual = { _id: feeID, sale: feeSaleID };
+        const filterActual = { _id: feeID};
         const updateActual = { isActive: false, isPayed: true };
         //Cambio los valores de la cuota ingresada: isActive -> false (deshabilita el boton pagar), isPayed -> true (fue pagada.)
-        const actualFee = await Fee.findOneAndUpdate(
+        await Fee.findOneAndUpdate(
           filterActual,
           updateActual,
           { new: true }
         );
 
-        await actualFee.save();
         successResponseSent = true;
         res.status(200).json({ message: "Operación exitosa." });
       }
