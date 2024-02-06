@@ -11,6 +11,7 @@ import {
   getTokenApi,
   registerRaceApi,
   localMemberSimple,
+  formatDate
 } from "./utmb_api.controllers";
 mercadopago.configure({
   access_token: process.env.ACCESS_TOKEN,
@@ -176,6 +177,8 @@ export const receiveWebhook = async (req, res) => {
   const salePrice = saleInfo.price;
   const userIdSale = saleInfo.user;
   const raceIdSale = saleInfo.race;
+  const userBirthdate = formatDate(userInfo.birthdate);
+
 
   //INFO RACES
   const raceInfo = await Race.findById(raceIdSale).exec();
@@ -198,6 +201,7 @@ export const receiveWebhook = async (req, res) => {
   var body = {
     firstName: userFirstname,
     lastName: userLastname,
+    birthdate: userBirthdate,
     gender: userGender,
     email: userEmail,
     nationality: userNationality.substring(0, 3),

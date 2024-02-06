@@ -26,7 +26,7 @@ export const memberSimple = async (req, res) => {
   return respuesta;
 };
 
-export const localMemberSimple  = async (authToken) => {
+export const localMemberSimple = async (authToken) => {
   var respuesta = "";
 
   const url = "https://api.utmb.world/users/dashboard/member/simple";
@@ -121,21 +121,21 @@ export const registerRaceApi = async (token, body, raceID) => {
   return respuesta;
 };
 
-function formatDate(fecha) {
+export const formatDate = (fecha) => {
   // Verifica si la entrada es un objeto Date
   if (!(fecha instanceof Date)) {
     return "0000-00-00";
   }
 
   const year = fecha.getFullYear();
-  const month = String(fecha.getMonth() + 1).padStart(2, '0');
-  const day = String(fecha.getDate()).padStart(2, '0');
+  const month = String(fecha.getMonth() + 1).padStart(2, "0");
+  const day = String(fecha.getDate()).padStart(2, "0");
 
   // Formatea la fecha como "yyyy-mm-dd"
   const fechaFormateada = `${year}-${month}-${parseInt(day) - 1}`;
 
   return fechaFormateada;
-}
+};
 
 export const Testeo = async (req, res) => {
   const { feeID, status } = req.body;
@@ -191,7 +191,6 @@ export const Testeo = async (req, res) => {
     grp: userTeam,
   };
 
-
   const { access_token } = await getTokenApi();
 
   respuesta = await registerRaceApi(access_token, body, utmbRaceId);
@@ -201,11 +200,9 @@ export const Testeo = async (req, res) => {
       .status(200)
       .json({ message: "Operación exitosa.", respuesta: respuesta });
   } else {
-    return res
-      .status(500)
-      .json({
-        message: "Ha ocurrido un error en el proceso.",
-        respuesta: respuesta,
-      });
+    return res.status(500).json({
+      message: "Ha ocurrido un error en el proceso.",
+      respuesta: respuesta,
+    });
   }
 };
