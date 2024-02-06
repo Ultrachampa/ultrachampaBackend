@@ -275,13 +275,4 @@ export const receiveWebhook = async (req, res) => {
   }
 };
 
-function formatDate(fecha) {
-  // Verifica si la entrada es un objeto Date
-  if (!(fecha instanceof Date)) {
-    return "0000-00-00";
-  }
-  // Convierte la fecha a formato ISO (yyyy-mm-dd)
-  const fechaFormateada = fecha.toISOString().split("T")[0];
 
-  return fechaFormateada;
-}
