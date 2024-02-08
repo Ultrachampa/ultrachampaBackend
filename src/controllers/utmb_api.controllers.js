@@ -122,19 +122,9 @@ export const registerRaceApi = async (token, body, raceID) => {
 };
 
 export const formatDate = (fecha) => {
-  // Verifica si la entrada es un objeto Date
-  if (!(fecha instanceof Date)) {
-    return "0000-00-00";
-  }
-
-  const year = fecha.getFullYear();
-  const month = String(fecha.getMonth() + 1).padStart(2, "0");
-  const day = String(fecha.getDate()).padStart(2, "0");
-
-  // Formatea la fecha como "yyyy-mm-dd"
-  const fechaFormateada = `${year}-${month}-${parseInt(day) - 1}`;
-
-  return fechaFormateada;
+  const dateString = fecha.toISOString()
+  const fechaFormateada = dateString.split("T");
+  return fechaFormateada[0];
 };
 
 export const Testeo = async (req, res) => {
@@ -191,18 +181,20 @@ export const Testeo = async (req, res) => {
     grp: userTeam,
   };
 
-  const { access_token } = await getTokenApi();
+  console.log(body);
 
-  respuesta = await registerRaceApi(access_token, body, utmbRaceId);
+  // const { access_token } = await getTokenApi();
 
-  if (respuesta.status === "OK") {
-    return res
-      .status(200)
-      .json({ message: "Operación exitosa.", respuesta: respuesta });
-  } else {
-    return res.status(500).json({
-      message: "Ha ocurrido un error en el proceso.",
-      respuesta: respuesta,
-    });
-  }
+  // respuesta = await registerRaceApi(access_token, body, utmbRaceId);
+
+  // if (respuesta.status === "OK") {
+  //   return res
+  //     .status(200)
+  //     .json({ message: "Operación exitosa.", respuesta: respuesta });
+  // } else {
+  //   return res.status(500).json({
+  //     message: "Ha ocurrido un error en el proceso.",
+  //     respuesta: respuesta,
+  //   });
+  // }
 };
