@@ -183,18 +183,18 @@ export const Testeo = async (req, res) => {
 
   console.log(body);
 
-  // const { access_token } = await getTokenApi();
+  const { access_token } = await getTokenApi();
 
-  // respuesta = await registerRaceApi(access_token, body, utmbRaceId);
+  respuesta = await registerRaceApi(access_token, body, utmbRaceId);
 
-  // if (respuesta.status === "OK") {
-  //   return res
-  //     .status(200)
-  //     .json({ message: "Operación exitosa.", respuesta: respuesta });
-  // } else {
-  //   return res.status(500).json({
-  //     message: "Ha ocurrido un error en el proceso.",
-  //     respuesta: respuesta,
-  //   });
-  // }
+  if (respuesta.status === "OK") {
+    return res
+      .status(200)
+      .json({ message: "Operación exitosa.", respuesta: respuesta });
+  } else {
+    return res.status(500).json({
+      message: "Ha ocurrido un error en el proceso.",
+      respuesta: respuesta,
+    });
+  }
 };
