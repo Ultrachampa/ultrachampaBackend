@@ -5,14 +5,7 @@ import DiscountCode from "../models/DiscountCodes";
 import Fee from "../models/Fee";
 import Sale from "../models/Sale";
 import Users from "../models/Users";
-import fetch from "node-fetch";
 
-import {
-  getTokenApi,
-  registerRaceApi,
-  localMemberSimple,
-  formatDate
-} from "./utmb_api.controllers";
 mercadopago.configure({
   access_token: process.env.ACCESS_TOKEN,
 });
@@ -77,7 +70,7 @@ export const payProduct = async (req, res) => {
 //Generador de links de pago, recibe el ID de la cuota a pagar como parámetro
 export const payFee = async (req, res) => {
   let body = req.body;
-  const { feeID } = body;
+  const { feeID, authToken } = body;
   const fee = await Fee.findOne({ _id: feeID }).exec(); //Obtengo toda la información de la cuota ingresada
   try {
     var now = new Date(); //fecha actual
@@ -133,6 +126,7 @@ export const payFee = async (req, res) => {
         auto_return: "approved",
         notification_url: `https://backend-runners-api.vercel.app/api/payment/webhookMP/${feeID}`,
         date_of_expiration: json_linkExpireDate,
+        metadata: { AuthTokenClient: authToken },
       };
 
       // Crear la preferencia de pago en Mercado Pago
@@ -146,8 +140,6 @@ export const payFee = async (req, res) => {
       res.send(paymentLink);
 
       //Guardo al fecha de expiración del link en la BDD
-      const filterActual = { _id: feeID };
-      const updateActual = { linkGeneratedDate: linkGeneratedDate };
       await Fee.findOneAndUpdate(
         { _id: feeID },
         { linkGeneratedDate: linkGeneratedDate }
@@ -177,8 +169,6 @@ export const receiveWebhook = async (req, res) => {
   const salePrice = saleInfo.price;
   const userIdSale = saleInfo.user;
   const raceIdSale = saleInfo.race;
-  const userBirthdate = formatDate(userInfo.birthdate);
-
 
   //INFO RACES
   const raceInfo = await Race.findById(raceIdSale).exec();
@@ -201,7 +191,6 @@ export const receiveWebhook = async (req, res) => {
   var body = {
     firstName: userFirstname,
     lastName: userLastname,
-    birthdate: userBirthdate,
     gender: userGender,
     email: userEmail,
     nationality: userNationality.substring(0, 3),
@@ -224,40 +213,11 @@ export const receiveWebhook = async (req, res) => {
 
       //Establezco los filtros y los parámetros a actualizar
       if (data.body.status === "approved") {
-        if (numFee === 3) {
-          //INSERT O AVISO A API DE UMTB EL REGISTRO DE UNA CARRERA
-          const { access_token } = await getTokenApi();
-
-          if (access_token !== "") {
-            const { birthdateIso } = await localMemberSimple(access_token);
-
-            body.birthdate = birthdateIso;
-
-            await registerRaceApi(access_token, body, utmbRaceId);
-          }
-        } else if (numFee === 1) {
-          if (parseFloat(feePrice) === parseFloat(salePrice)) {
-            //INSERT O AVISO A API DE UMTB EL REGISTRO DE UNA CARRERA
-            const { access_token } = await getTokenApi();
-
-            if (access_token !== "") {
-              const { birthdateIso } = await localMemberSimple(access_token);
-              body.birthdate = birthdateIso;
-
-              await registerRaceApi(access_token, body, utmbRaceId);
-            }
-          }
-        }
-
         //Establezco los filtros y los parámetros a actualizar
-        const filterActual = { _id: feeID};
+        const filterActual = { _id: feeID };
         const updateActual = { isActive: false, isPayed: true };
         //Cambio los valores de la cuota ingresada: isActive -> false (deshabilita el boton pagar), isPayed -> true (fue pagada.)
-        await Fee.findOneAndUpdate(
-          filterActual,
-          updateActual,
-          { new: true }
-        );
+        await Fee.findOneAndUpdate(filterActual, updateActual, { new: true });
 
         successResponseSent = true;
         res.status(200).json({ message: "Operación exitosa." });
@@ -274,5 +234,3 @@ export const receiveWebhook = async (req, res) => {
     return res.sendStatus(500).json({ error: error.message });
   }
 };
-
-
